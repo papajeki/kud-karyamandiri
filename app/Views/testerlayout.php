@@ -11,19 +11,20 @@
 </head>
 
 <body>
-<?= $this->include('layout/navbar') ?>
 
-	<header class="jumbotron jumbotron-fluid">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<h1 class="h1">Portal Berita Codeigniter</h1>
-				</div>
-			</div>
-		</div>
+	
+	<div class="d-flex">
+		<?= $this->include('layout/sidebar') ?>
+		<div>
+		<header class="jumbotron jumbotron-fluid">
+		<div class="d-flex">
+		<?= $this->include('layout/navbar') ?>
     </header>
-    
-    <?= $this->renderSection('content') ?>
+			<?= $this->renderSection('content') ?>
+		</div>
+		
+	</div>
+
 
 	<footer class="jumbotron jumbotron-fluid mt-5 mb-0">
 		<div class="container text-center">Copyright &copy <?= Date('Y') ?> CI News</div>
