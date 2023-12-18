@@ -14,13 +14,9 @@
 
 	
 	<div class="d-flex">
-		<?= $this->include('layout/sidebar') ?>
-		<div style="width: 100%;">
-			<header class="jumbotron jumbotron-fluid">
-				<div class="d-flex">
-					<?= $this->include('layout/navbar') ?>
-				</div>
-			</header>
+        <h1>aoisdjaioshda</h1>
+        <h2>asidjao</h2>
+    </header>
 			<?= $this->renderSection('content') ?>
 		</div>
 		
