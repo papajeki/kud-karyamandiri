@@ -2,10 +2,14 @@
 
 namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
+use App\Models\UserModel;
+
 class Users extends BaseController
 {
     public function index()
     {
-        echo view("admin/users");
+        $model = new UserModel();
+        $data['result'] = $model->findAll();
+        return view("admin/users",$data);
     }
 }

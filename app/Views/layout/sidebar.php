@@ -12,8 +12,8 @@
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link text-white navItem">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+        <a href="<?=base_url('/admin/users') ?>" class="nav-link text-white navItem">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href=""></use></svg>
           Data Users
         </a>
       </li>
