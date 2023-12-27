@@ -13,8 +13,9 @@ class Admin extends BaseController
         echo view("admin/admin");
     }
 
-    public function users()
-    {
-        echo view("admin/users");
-    }
+    // public function users()
+    // {
+    //     echo view("admin/users");
+    // }
+    
 }

@@ -18,5 +18,9 @@ $routes->get('/testdatabaseconnection', 'TestDatabaseConnection::index');
 $routes->group('admin',function($routes){
     // $routes->get('/', 'Admin\Admin::index');
     $routes->get('users', 'Admin\Users::index');
+    // route alamat untuk simpan data user
+    $routes->post('simpan', 'Admin\Users::simpan');
+
+    $routes->get('create_user', 'Admin\Users::create_user');
 
 });

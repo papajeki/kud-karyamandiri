@@ -6,7 +6,7 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto d-flex" style="gap: 2px;">
       <li class="nav-item navItem">
-        <a href="#" class="nav-link active" aria-current="page">
+        <a href="<?=base_url() ?>" class="nav-link active" aria-current="page">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
           Home
         </a>

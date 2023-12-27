@@ -28,6 +28,7 @@
       <th scope="col">Surename</th>
       <th scope="col">Roles</th>
 	  <th scope="col">Action</th>
+	  <th scope="col"><a href="<?=base_url('/admin/create_user')?>">Create Account</a></th>
     </tr>
   </thead>
   <tbody>
