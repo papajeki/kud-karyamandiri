@@ -8,8 +8,8 @@ class Home extends BaseController
     {
         echo view("welcome_message");
     }
-    public function login()
+    public function main()
     {
-         echo view("login");
+        echo view("select_role");
     }
 }

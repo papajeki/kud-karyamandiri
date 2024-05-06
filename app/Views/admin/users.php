@@ -42,7 +42,9 @@
 				<td>
 					<div>
 						<button>Edit</button>
-						<button>Hapus</button>
+						<form action="<?= base_url('/admin/delete/' . $row['id']) ?>" method="post" onsubmit="return confirm('Are you sure?')">
+						<button type="submit">Hapus</button>
+						</form>
 					</div>
 				</td>
 		

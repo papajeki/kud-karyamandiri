@@ -12,13 +12,14 @@
 
 <body>
 
-	
+	<!-- Layout tampilan web, atas dan konten -->
 	<div class="d-flex">
-		<?= $this->include('layout/sidebar') ?>
+		<!--sidebar dimatikan  -->
+		<!-- <?= $this->include('layout/sidebar') ?> -->
 		<div style="width: 100%;">
 			<header class="jumbotron jumbotron-fluid">
 				<div class="d-flex">
-					<?= $this->include('layout/navbar') ?>
+					<?= $this->include('layout/navbar_admin') ?>
 				</div>
 			</header>
 			<?= $this->renderSection('content') ?>

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
+use app\Models\UserModel;
 
 class TestDatabaseConnection extends Controller
 {

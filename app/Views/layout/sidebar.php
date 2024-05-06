@@ -5,33 +5,48 @@
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto d-flex" style="gap: 2px;">
-      <li class="nav-item navItem">
-        <a href="<?=base_url() ?>" class="nav-link active" aria-current="page">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-          Home
+      <li 
+      class="nav-item navItem">
+        <a style="text-decoration:none;color:white;" href="<?=base_url('/dashboard_admin') ?>"
+          <?php
+            if($_SERVER['REQUEST_URI'] ==="/dashboard_admin"){
+              echo 'class="nav-link active"';
+            }else{
+              echo 'class="nav-link"';
+            }
+          ?>
+        >
+          Beranda
         </a>
       </li>
       <li>
-        <a href="<?=base_url('/admin/users') ?>" class="nav-link text-white navItem">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href=""></use></svg>
-          Data Users
+        <a style="text-decoration:none;color:white;" href="<?=base_url('/admin/users') ?> "
+        <?php
+            if($_SERVER['REQUEST_URI'] ==="/admin/users"){
+              echo 'class="nav-link active"';
+            }else{
+              echo 'class="nav-link"';
+            }
+          ?>
+           >
+          Daftar Karyawan
         </a>
       </li>
       <li>
         <a href="#" class="nav-link text-white navItem">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+          <svg class="bi me-1" width="16" height="16"><use xlink:href="#table"></use></svg>
           Orders
         </a>
       </li>
       <li>
         <a href="#" class="nav-link text-white navItem">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+          <svg class="bi me-1" width="16" height="16"><use xlink:href="#grid"></use></svg>
           Products
         </a>
       </li>
       <li>
         <a href="#" class="nav-link text-white navItem">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+          <svg class="bi me-1" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
           Customers
         </a>
       </li>
