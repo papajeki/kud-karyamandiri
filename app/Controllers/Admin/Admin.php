@@ -13,6 +13,16 @@ class Admin extends BaseController
         echo view("admin/admin");
     }
 
+    public function tabel_harga_sawit()
+    {
+        echo view("admin/harga_tbs");
+    }
+
+    public function input_harga_sawit()
+    {
+        echo view("admin/input_harga_sawit");
+    }
+
     // public function users()
     // {
     //     echo view("admin/users");

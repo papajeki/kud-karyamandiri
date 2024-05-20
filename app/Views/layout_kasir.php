@@ -14,7 +14,7 @@
 
 	
 	<div class="d-flex">
-		<?= $this->include('layout/sidebar') ?>
+		<?= $this->include('layout/sidebar_kasir') ?>
 		<div style="width: 100%;">
 			<header class="jumbotron jumbotron-fluid">
 				<div class="d-flex">

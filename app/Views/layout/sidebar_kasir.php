@@ -7,9 +7,9 @@
     <ul class="nav nav-pills flex-column mb-auto d-flex" style="gap: 2px;">
       <li 
       class="nav-item navItem">
-        <a style="text-decoration:none;color:white;" href="<?=base_url('/dashboard_admin') ?>"
+        <a style="text-decoration:none;color:white;" href="<?=base_url('/waserda') ?>"
           <?php
-            if($_SERVER['REQUEST_URI'] ==="/dashboard_admin"){
+            if($_SERVER['REQUEST_URI'] ==="/waserda"){
               echo 'class="nav-link active"';
             }else{
               echo 'class="nav-link"';
@@ -20,29 +20,48 @@
         </a>
       </li>
       <li>
-        <a style="text-decoration:none;color:white;" href="<?=base_url('/admin/users') ?> "
+        <a style="text-decoration:none;color:white;" href="<?=base_url('/waserda/kasir') ?> "
         <?php
-            if($_SERVER['REQUEST_URI'] ==="/admin/users"){
+            if($_SERVER['REQUEST_URI'] ==="/waserda/kasir"){
               echo 'class="nav-link active"';
             }else{
               echo 'class="nav-link"';
             }
           ?>
            >
-          Daftar Karyawan
+          Kasir Waserda
         </a>
       </li>
       <li>
-        <a style="text-decoration:none;color:white;" href="<?=base_url('/admin/harga_tbs') ?>" 
+        <a style="text-decoration:none;color:white;" href="<?=base_url('/waserda/produk') ?>" 
         <?php
-            if($_SERVER['REQUEST_URI'] ==="/admin/harga_tbs"){
+            if($_SERVER['REQUEST_URI'] ==="/waserda/produk"){
               echo 'class="nav-link active"';
             }else{
               echo 'class="nav-link"';
             }
           ?>
           >
-          Harga Sawit
+          Stok Barang
+        </a>
+      </li>
+      <li>
+        <a style="text-decoration:none; color:white;" href="<?=base_url('/waserda/data_penjualan') ?>" 
+        <?php
+            if($_SERVER['REQUEST_URI'] ==="/waserda/data_penjualan"){
+              echo 'class="nav-link active"';
+            }else{
+              echo 'class="nav-link"';
+            }
+          ?>
+          >
+          Data Penjualan
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white navItem">
+          <svg class="bi me-1" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+          Customers
         </a>
       </li>
     </ul>

@@ -3,7 +3,7 @@
 
 	<div class="container d-flex" style="min-height:100vh;justify-content:center; align-items:center; gap:2em;">
 		<!--Menu pemilihan dashboard-->
-		<a href="" class="d-flex" style="
+		<a href="/dashboard_admin" class="d-flex" style="
 			justify-content:center;
 			align-items:center;
 			min-height:12em;
@@ -15,7 +15,7 @@
 			<span style="font-weight:bold; color:white;">Super Admin</span>
 		</a>
 
-		<a href="" class="d-flex" style="
+		<a href="/waserda" class="d-flex" style="
 			justify-content:center;
 			align-items:center;
 			min-height:12em;
@@ -49,7 +49,7 @@
 			text-decoration:none;
 		">
 			<span style="font-weight:bold; color:white;">Kelompok Tani</span>
-		</div>
 		</a>
+	</div>
 
 <?= $this->endSection() ?>

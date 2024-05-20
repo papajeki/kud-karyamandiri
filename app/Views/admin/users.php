@@ -1,6 +1,12 @@
 <?= $this->extend('testerlayout') ?>
 <?= $this->section('content') ?>
 
+<div class="d-flex" style="padding:1em;">	<button class="btn btn-success" style="border-radius:15px; margin-inline-start:auto">
+			<a href="<?=base_url('/admin/create_user')?>" style="text-decoration:none; color:white;">
+			Create Account</a>
+		</button>
+</div>
+
 <!-- <div class="container col-md-12">
 <div class="row">
 			<div class="col-md-12 my-2 card">
@@ -24,11 +30,10 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Username</th>
-      <th scope="col">Surename</th>
-      <th scope="col">Roles</th>
-	  <th scope="col">Action</th>
-	  <th scope="col"><a href="<?=base_url('/admin/create_user')?>">Create Account</a></th>
+      <th scope="col" style="text-align: center;">Username</th>
+      <th scope="col" style="text-align: center;">Surename</th>
+      <th scope="col"style="text-align: center;">Roles</th>
+	  <th scope="col"style="text-align: center;">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -40,10 +45,10 @@
 				<td><?= $row['surename'];?></td>
 				<td><?= $row['roles'];?></td>
 				<td>
-					<div>
-						<button>Edit</button>
+					<div class="d-flex" style="gap:1em; justify-content:center;">
+						<button class="btn btn-primary" style="border-radius: 10px;">Edit</button>
 						<form action="<?= base_url('/admin/delete/' . $row['id']) ?>" method="post" onsubmit="return confirm('Are you sure?')">
-						<button type="submit">Hapus</button>
+						<button class="btn btn-danger" style="border-radius: 10px;" type="submit">Hapus</button>
 						</form>
 					</div>
 				</td>
