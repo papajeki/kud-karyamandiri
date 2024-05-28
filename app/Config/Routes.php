@@ -5,21 +5,21 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/index', 'Home::main');
-$routes->get('/dashboard_admin', 'Home::index');
-$routes->get('/login', 'Login::index');
+//index
+ $routes->get('/index', 'Home::main',['filter' => 'auth']);
+//$routes->get('/dashboard_admin', 'Home::index',['filter' => 'auth']);
+
 $routes->get('/testdatabaseconnection', 'TestDatabaseConnection::index');
 
-//login auth
+
+//login
+$routes->get('/login', 'Login::index');
 $routes->post('/login/auth', 'Login::process');
-//  Group admin
-// $routes->group('admin', function($routes){
-//     $routes->get('users','Admin\Users::index');
-// });
+$routes->get('logout', 'Login::logout');
 
 // grup routes Roles Admin
-$routes->group('admin',function($routes){
-    //$routes->get('/', 'Admin\Admin::index');
+$routes->group('admin',['filter' => 'auth'],function($routes){
+    $routes->get('/', 'Admin\Admin::index');
     $routes->get('users', 'Admin\Users::index');
     // route alamat untuk simpan data user
     $routes->post('simpan', 'Admin\Users::simpan');

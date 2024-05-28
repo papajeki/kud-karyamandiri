@@ -5,11 +5,33 @@ namespace App\Controllers;
 class Home extends BaseController
 {
     public function index()
-    {
-        echo view("welcome_message");
+    {  $sess = session();
+        $role = $sess->get('role');
+        $username = $sess->get('username');
+        $surname = $sess->get('surname');
+
+        $data['role'] = $role;
+        $data['username'] = $username;
+        $data['surname'] = $surname;
+        if($role !== 'admin'){
+            return redirect()->to('/index');
+        }else{
+            echo view("welcome_message",$data);
+        }
     }
     public function main()
     {
-        echo view("select_role");
+        $sess = session();
+        $role = $sess->get('role');
+        $username = $sess->get('username');
+        $surname = $sess->get('surname');
+
+        $data['role'] = $role;
+        $data['username'] = $username;
+        $data['surname'] = $surname;
+        // $logged_in = $sess->get("logged_in");
+        // $role = $sess->get("role");
+
+        echo view("select_role",$data);
     }
 }

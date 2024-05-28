@@ -15,7 +15,6 @@
 	<!-- Layout tampilan web, atas dan konten -->
 	<div class="d-flex">
 		<!--sidebar dimatikan  -->
-		<!-- <?= $this->include('layout/sidebar') ?> -->
 		<div style="width: 100%;">
 			<header class="jumbotron jumbotron-fluid">
 				<div class="d-flex">

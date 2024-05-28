@@ -18,21 +18,31 @@ public function process()
     $username = $this->request->getVar('username');
     $password = $this->request->getVar('password');
     $data = $model->where('username', $username)->first();
-    $pass = $data['password'];
 
     if($data){
+        $pass = $data['password'];
+
+        $debugStr = "";
         $verify_pass = password_verify($password, $pass);
+
+        // if($verify_pass){
+        //     $debugStr = "true";
+        // }else{
+        //     $debugStr = "false";
+        // }
+        
         if($verify_pass){
             $ses_data = [
                 'id'       => $data['id'],
                 'username'     => $data['username'],
                 'surename'    => $data['surename'],
+                'role' => $data['roles'],
                 'logged_in'     => TRUE
             ];
             $session->set($ses_data);
-            return redirect()->to('/dashboard_admin');
+            return redirect()->to('/index');
         }else{
-            $session->setFlashdata('msg','Wrong Password');
+            $session->setFlashdata('msg',"wrongpassword".$password);
             return redirect()->to('/login');
         }
     }else{
@@ -44,9 +54,9 @@ public function process()
 
 public function logout()
 {
-    // Hapus data pengguna dari sesi saat logout
-    $session = session();
-    $session->remove('user');
+    // Hapus data sesi saat logout
+    session()->destroy();
+        return redirect()->to('login');
 
     // Redirect ke halaman login setelah logout
     return redirect()->to('/login');

@@ -8,6 +8,15 @@ class Users extends BaseController
 {
     public function index()
     {
+        $sess = session();
+        $role = $sess->get('role');
+        $username = $sess->get('username');
+        $surname = $sess->get('surname');
+
+        $data['role'] = $role;
+        $data['username'] = $username;
+        $data['surname'] = $surname;
+        
         $model = new UserModel();
         $data['result'] = $model->findAll();
         return view("admin/users",$data);

@@ -9,35 +9,41 @@
     </form>
 </div>
 
-<div class="container shadow">
+<div class="container-sm shadow border border-primary">
     <span class="h3">Daftar Transaksi </span>
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Nomor Struk</th>
+                <th scope="col">Nama Petugas</th>
+                <th scope="col" style="text-align: right;">Nilai Transaksi</th>
             </tr>
             </thead>
         <tbody>
             <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+                <th scope="row">20-05-2024 : 09:30</th>
+                <td>2024052004</td>
+                <td>Dewi Yuliyati</td>
+                <td style="text-align: right;">Rp 30.0000</td>
             </tr>
             <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
+                <th scope="row">20-05-2024 : 09:20</th>
+                <td>2024052003</td>
+                <td>Dewi Yuliyati</td>
+                <td style="text-align: right;">Rp 150.000</td>
             </tr>
             <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
+                <th scope="row">20-05-2024 : 09:16</th>
+                <td>2024052002</td>
+                <td>Dewi Yuliyati</td>
+                <td style="text-align: right;">Rp 36.000</td>
+            </tr>
+            <tr>
+                <th scope="row">20-05-2024 : 09:10</th>
+                <td>2024052001</td>
+                <td>Dewi Yuliyati</td>
+                <td style="text-align: right;">Rp 74.000</td>
             </tr>
         </tbody>
     </table>

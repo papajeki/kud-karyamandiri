@@ -7,7 +7,7 @@
     <ul class="nav nav-pills flex-column mb-auto d-flex" style="gap: 2px;">
       <li 
       class="nav-item navItem">
-        <a style="text-decoration:none;color:white;" href="<?=base_url('/dashboard_admin') ?>"
+        <a style="text-decoration:none;color:white;" href="<?=base_url('/admin') ?>"
           <?php
             if($_SERVER['REQUEST_URI'] ==="/dashboard_admin"){
               echo 'class="nav-link active"';
