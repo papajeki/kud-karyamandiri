@@ -3,19 +3,31 @@
 namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use PhpParser\Builder\Function_;
+use PhpParser\Node\Expr\FuncCall;
 
 class Users extends BaseController
 {
+    public function __construct()
+    {
+        
+        if (session()->get('role') != "admin") {
+            echo 'Access denied';
+            exit;
+            
+        }
+    }
     public function index()
     {
         $sess = session();
         $role = $sess->get('role');
         $username = $sess->get('username');
-        $surname = $sess->get('surname');
+        $surename = $sess->get('surename');
 
         $data['role'] = $role;
         $data['username'] = $username;
-        $data['surname'] = $surname;
+        $data['surename'] = $surename;
         
         $model = new UserModel();
         $data['result'] = $model->findAll();
@@ -36,7 +48,33 @@ class Users extends BaseController
 
     public function create_user()
     {
-        return view("admin/create_user");
+        $sess = session();
+        $role = $sess->get('role');
+        $username = $sess->get('username');
+        $surename = $sess->get('surename');
+
+        $data['role'] = $role;
+        $data['username'] = $username;
+        $data['surename'] = $surename;
+
+        return view("admin/create_user",$data);
+    }
+
+    public function edit_user($id){
+        $sess = session();
+        $role = $sess->get('role');
+        $username = $sess->get('username');
+        $surename = $sess->get('surename');
+
+        $data['role'] = $role;
+        $data['username'] = $username;
+        $data['surename'] = $surename;
+        //data users
+        $model = new UserModel();
+        $data['users'] = $model->where('id',$id)->first();
+
+
+        return view("admin/edit_user",$data);
     }
     public function delete($id)
     {
@@ -51,5 +89,14 @@ class Users extends BaseController
         }
 
         return redirect()->to('/admin/users'); // Sesuaikan dengan halaman yang benars
+    }
+
+    public Function update($id)
+    {
+        $model = new UserModel();
+        $data=[ 'surename' => $this->request->getPost('surename'),
+        'roles' => $this->request->getPost('roles')];
+        $model->update($id,$data);
+        return redirect()->to('/admin/users');
     }
 }

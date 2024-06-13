@@ -9,7 +9,7 @@
       class="nav-item navItem">
         <a style="text-decoration:none;color:white;" href="<?=base_url('/admin') ?>"
           <?php
-            if($_SERVER['REQUEST_URI'] ==="/dashboard_admin"){
+            if($_SERVER['REQUEST_URI'] ==="/admin"){
               echo 'class="nav-link active"';
             }else{
               echo 'class="nav-link"';
@@ -19,7 +19,7 @@
           Beranda
         </a>
       </li>
-      <li>
+      <li class="nav-item navItem">
         <a style="text-decoration:none;color:white;" href="<?=base_url('/admin/users') ?> "
         <?php
             if($_SERVER['REQUEST_URI'] ==="/admin/users"){
@@ -32,7 +32,7 @@
           Daftar Karyawan
         </a>
       </li>
-      <li>
+      <li class="nav-item navItem">
         <a style="text-decoration:none;color:white;" href="<?=base_url('/admin/harga_tbs') ?>" 
         <?php
             if($_SERVER['REQUEST_URI'] ==="/admin/harga_tbs"){

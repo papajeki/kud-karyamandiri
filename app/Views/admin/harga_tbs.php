@@ -10,36 +10,13 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th style="text-align:center;" scope="col">Periode</th>
-      <th scope="col">Harga</th>
+      <th scope="col" style="text-align: center;">Tanggal Awal Berlaku</th>
+      <th scope="col" style="text-align: center;">Tanggal Akhir Berlaku</th>
+      <th scope="col"style="text-align: center;">Harga</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-        <td class="d-flex" style="justify-content:space-evenly;">
-            <span>07-11-2023</span>
-            <span>13-11-2023</span>
-        </td>
-      <td>Rp.2.100/kg</td>
-    </tr>
-    <tr>
-      <th scope="row">1</th>
-        <td class="d-flex" style="justify-content:space-evenly;">
-            <span>07-11-2023</span>
-            <span>13-11-2023</span>
-        </td>
-      <td>Rp.2.100/kg</td>
-    </tr>
-    <tr>
-      <th scope="row">1</th>
-        <td class="d-flex" style="justify-content:space-evenly;">
-            <span>07-11-2023</span>
-            <span>13-11-2023</span>
-        </td>
-      <td>Rp.2.100/kg</td>
-    </tr>
+	<?= $this->include('components/listhargasawit') ?>
   </tbody>
 </table>
 

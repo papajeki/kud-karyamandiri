@@ -46,7 +46,9 @@
 				<td><?= $row['roles'];?></td>
 				<td>
 					<div class="d-flex" style="gap:1em; justify-content:center;">
+						<form action="<?= base_url('/admin/edit_user/' . $row['id']) ?>" method="post">
 						<button class="btn btn-primary" style="border-radius: 10px;">Edit</button>
+						</form>
 						<form action="<?= base_url('/admin/delete/' . $row['id']) ?>" method="post" onsubmit="return confirm('Are you sure?')">
 						<button class="btn btn-danger" style="border-radius: 10px;" type="submit">Hapus</button>
 						</form>

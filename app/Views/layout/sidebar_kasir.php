@@ -33,16 +33,16 @@
         </a>
       </li>
       <li>
-        <a style="text-decoration:none;color:white;" href="<?=base_url('/waserda/produk') ?>" 
+        <a style="text-decoration:none;color:white;" href="<?=base_url('/waserda/barang') ?>" 
         <?php
-            if($_SERVER['REQUEST_URI'] ==="/waserda/produk"){
+            if($_SERVER['REQUEST_URI'] ==="/waserda/barang"){
               echo 'class="nav-link active"';
             }else{
               echo 'class="nav-link"';
             }
           ?>
           >
-          Stok Barang
+          Data Barang
         </a>
       </li>
       <li>
@@ -56,12 +56,6 @@
           ?>
           >
           Data Penjualan
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link text-white navItem">
-          <svg class="bi me-1" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-          Customers
         </a>
       </li>
     </ul>

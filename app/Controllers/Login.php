@@ -56,10 +56,9 @@ public function logout()
 {
     // Hapus data sesi saat logout
     session()->destroy();
-        return redirect()->to('login');
+        return redirect()->to('/login');
 
     // Redirect ke halaman login setelah logout
-    return redirect()->to('/login');
 }
  //$sandi = password_hash($password,PASSWORD_DEFAULT);
 }

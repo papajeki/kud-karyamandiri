@@ -24,11 +24,11 @@ class Home extends BaseController
         $sess = session();
         $role = $sess->get('role');
         $username = $sess->get('username');
-        $surname = $sess->get('surname');
+        $surename = $sess->get('surename');
 
         $data['role'] = $role;
         $data['username'] = $username;
-        $data['surname'] = $surname;
+        $data['surename'] = $surename;
         // $logged_in = $sess->get("logged_in");
         // $role = $sess->get("role");
 
