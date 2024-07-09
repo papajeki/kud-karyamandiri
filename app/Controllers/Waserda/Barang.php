@@ -18,6 +18,8 @@ class Barang extends BaseController{
             
         }
     }
+
+    //Barang-----------------------------------------------------------------------------
     public function produk()
     { $sess = session();
         $surename = $sess->get('surename');
@@ -65,6 +67,7 @@ class Barang extends BaseController{
         }
     return view('waserda/create_barang',$data);
     }
+
     public function edit_produk($id_barang)
     {
         $sess = session();
@@ -75,7 +78,8 @@ class Barang extends BaseController{
         $data['barang'] = $model->where('id_barang',$id_barang)->first();
         return view('waserda/edit_produk',$data);
     }
-    
+
+    //  Update barang sementara tidak dipakai
     public function update_barang($id_barang)
     {
         $sess = session();
@@ -92,6 +96,7 @@ class Barang extends BaseController{
     return redirect("waserda/barang",$data);
     }
 
+    //update barang gabung dengan update harga
     public function update_harga_barang($id_barang){
         $sess = session();
         $surename = $sess->get('surename');
@@ -99,11 +104,12 @@ class Barang extends BaseController{
 
         $model = new BarangModel;
         //ambil data inputan
-        $harga_jual = $this->request->getPost('harga_jual');
         if($this->validate([ 'harga_jual' => 'required|numeric'])){
             //update harga
             $data = [
-                'harga_jual' => $harga_jual
+                'nama_barang' => $this->request->getPost('nama_barang'),
+                'barcode' => $this->request->getPost('barcode'),
+                'harga_jual' => $this->request->getPost('harga_jual')
             ];
             if ($model->update($id_barang, $data)) {
                 // Set success message and redirect
@@ -119,7 +125,7 @@ class Barang extends BaseController{
         return redirect("waserda/barang",$data);
     }
 
-    //stok barang
+    //stok barang----------------------------------------------------------------------
     public function stok_barang($id_barang){
         $sess = session();
         $surename = $sess->get('surename');
@@ -130,7 +136,12 @@ class Barang extends BaseController{
          $data['barang'] = $model->where('id_barang',$id_barang)->first();
         $stokData = $stok->getstokbarang($id_barang);
         $data['stokdata'] = $stokData;
-        // $data['barang'] = $model->where('id_barang',$id_barang)->first();
+        //menampilkan jumlah stok
+        $jumlah_barang = 0;
+        foreach ($stokData as $stok) {
+            $jumlah_barang += $stok['kuantitas'] - $stok['terjual'];
+        }
+        $data['jumlah_barang'] = $jumlah_barang;
 
         return view('waserda/stok_barang',$data);
     }
@@ -145,5 +156,45 @@ class Barang extends BaseController{
 
     $model->insert($data);
     return redirect()->to('/waserda/stok_barang/' . $data['id_barang']);
+    }
+
+    public function edit_stok($id_stok)
+    {
+        $sess = session();
+        $surename = $sess->get('surename');
+        $data['surename'] = $surename;
+
+        $model = new StokModel();
+        $stokdata = $model->where('id_stok', $id_stok)->first();
+        $data['stok'] = $stokdata;
+
+        if ($stokdata) {
+            $id_barang = $stokdata['id_barang'];
+            $stokDetail = $model->getstokbarang($id_barang);
+            if (!empty($stokDetail)) {
+                $data['nama_barang'] = $stokDetail[0]['nama_barang']; // Assuming all records will have the same `nama_barang`
+            } else {
+                $data['nama_barang'] = 'N/A'; // Default value if no stok found
+            }
+        } else {
+            $data['nama_barang'] = 'N/A';
+        }
+        return view('waserda/edit_stok',$data);
+    }
+
+    public function update_stok($id_stok)
+    {
+        //get nama asli user
+        $sess = session();
+        $surename = $sess->get('surename');
+        $data['surename'] = $surename;
+
+        $model = new StokModel();
+        $update = [
+            'kuantitas' => $this->request->getPost('kuantitas'),
+            'harga_beli' => $this->request->getPost('harga_beli')
+        ];
+        $model->update($id_stok,$update);
+        return redirect("waserda/barang");
     }
 }

@@ -38,17 +38,20 @@ $routes->group('admin',['filter' => 'auth'],function($routes){
 $routes->group('waserda',function($routes){
 // kud-karyamandiri/waserda/
     $routes->get('/','Waserda\Kasir::index');
-    $routes->get('kasir','Waserda\Kasir::kasir');
+    $routes->add('kasir','Waserda\Kasir::kasir');
+    $routes->post('kasir/completeTransaction', 'Waserda\Kasir::completeTransaction');
+
     //produk waserda
     $routes->get('barang','Waserda\Barang::produk');
     $routes->add('create_barang','Waserda\Barang::create_barang');
     $routes->post('update_barang/(:num)', 'Waserda\Barang::update_barang/$1');
-    $routes->add('edit_produk/(:num)','Waserda\Barang::edit_produk/$1');
+    //$routes->add('edit_produk/(:num)','Waserda\Barang::edit_produk/$1');
     $routes->post('edit_harga_produk/(:num)', 'Waserda\Barang::update_harga_barang/$1');
     //stok barang
     $routes->add('stok_barang/(:num)','Waserda\Barang::stok_barang/$1');
-    //$routes->get('stok_barang','Waserda\Barang::stok_barang');
     $routes->post('restok','Waserda\Barang::restok');
+    $routes->add('edit_stok/(:num)','Waserda\Barang::edit_stok/$1');
+    $routes->post('update_stok/(:num)', 'Waserda\Barang::update_stok/$1');
     
     //riwayat transaksi
     $routes->get('data_penjualan','Waserda\Kasir::data_penjualan');

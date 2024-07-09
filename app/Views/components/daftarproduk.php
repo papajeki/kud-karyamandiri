@@ -13,7 +13,7 @@
             <?php if (!empty($result)): ?>
                 <?php foreach ($result as $index => $row): ?>
                 <tr>
-                    <th scope="row"><?= $index+1; ?></th>
+                    <th scope="row"><?= $index + 1 + ($pager->getCurrentPage() - 1) * $pager->getPerPage(); ?></th>
                     <td><?= $row['nama_barang']; ?></td>
                     <td><?= $row['barcode']; ?></td>
                     <td><?= $row['harga_jual']; ?></td>
@@ -25,11 +25,8 @@
                                     data-nama="<?= $row['nama_barang']; ?>"
                                     data-barcode="<?= $row['barcode']; ?>"
                                     data-harga="<?= $row['harga_jual']; ?>">
-                                Edit
+                                Edit Data Produk
                             </button>
-                            <form action="<?= base_url('/waserda/edit_produk/' .$row['id_barang']) ?>" method="post">
-                                <button class="btn btn-secondary" style="border-radius: 5px;" type="submit">Edit Barang</button>
-                            </form>
                             <form action="<?= base_url('/waserda/stok_barang/' .$row['id_barang']) ?>" method="post">
                                 <button onclick="" class="btn btn-success" style="border-radius: 5px;" type="submit">Stok Barang</button>
                             </form>
@@ -42,12 +39,17 @@
     </table>
 </div>
 
+<!-- Pagination Links -->
+<div class="d-flex justify-content-center">
+    <?= $pager->links() ?>
+</div>
+
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Harga Jual</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Data Barang</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -55,17 +57,17 @@
                     <input type="hidden" name="id_barang" id="id_barang">
                     <div class="mb-3">
                         <label for="nama_barang" class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" readonly>
+                        <input type="text" class="form-control" id="nama_barang" name="nama_barang">
                     </div>
                     <div class="mb-3">
                         <label for="barcode" class="form-label">Kode Barcode</label>
-                        <input type="text" class="form-control" id="barcode" name="barcode" readonly>
+                        <input type="text" class="form-control" id="barcode" name="barcode">
                     </div>
                     <div class="mb-3">
                         <label for="harga_jual" class="form-label">Harga Jual</label>
                         <input type="number" class="form-control" id="harga_jual" name="harga_jual">
                     </div>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 </form>
             </div>
         </div>

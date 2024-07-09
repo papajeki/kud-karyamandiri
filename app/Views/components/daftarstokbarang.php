@@ -3,8 +3,11 @@
     <thead>
         <tr>
             <th scope="col">Nama Barang</th>
+            <th scope="col">Tanggal Penyetokan</th>
             <th scope="col">Kuantitas</th>
             <th scope="col">Harga Beli</th>
+            <th scope="col">Terjual</th>
+            <th scope="col">Aaction</th>
         </tr>
     </thead>
     <tbody>
@@ -12,8 +15,17 @@
         <?php foreach ($stokdata as $stok): ?>
                 <tr>
                     <td><?= $stok['nama_barang']; ?></td>
+                    <td><?= $stok['tanggal']; ?></td>
                     <td><?= $stok['kuantitas']; ?></td>
                     <td><?= $stok['harga_beli']; ?></td>
+                    <td><?= $stok['terjual']; ?></td>
+                    <td>
+                    <div class="d-flex" style="gap:1em; justify-content: center;">
+                        <form action="<?= base_url('/waserda/edit_stok/' .$stok['id_stok']) ?>" method="post">
+                            <button onclick="" class="btn btn-success" style="border-radius: 5px;" type="submit">Stok Barang</button>
+                        </form>
+                    </div>
+                    </td>
                 </tr>
         <?php endforeach; ?>
     <?php endif; ?>
@@ -25,7 +37,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addStokModalLabel">Add New Stok</h5>
+                        <h5 class="modal-title" id="addStokModalLabel">Tambah Stok</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -39,7 +51,7 @@
                                 <label for="harga_beli" class="form-label">Harga Beli</label>
                                 <input type="number" class="form-control" id="harga_beli" name="harga_beli" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Add Stok</button>
+                            <button type="submit" class="btn btn-primary">Tambah Stok Barang</button>
                         </form>
                     </div>
                 </div>
