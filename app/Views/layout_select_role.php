@@ -18,7 +18,7 @@
 		<div style="width: 100%;">
 			<header class="jumbotron jumbotron-fluid">
 				<div class="d-flex">
-					<?= $this->include('layout/navbar_admin') ?>
+					<?= $this->include('layout/navbar') ?>
 				</div>
 			</header>
 			<?= $this->renderSection('content') ?>

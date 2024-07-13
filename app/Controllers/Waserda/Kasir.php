@@ -1,26 +1,23 @@
 <?php
 
 namespace App\Controllers\Waserda;
-
 use App\Controllers\BaseController;
 use App\Models\BarangModel;
 use App\Models\ItemTerjualModel;
 use App\Models\PenjualanModel;
 use App\Models\StokModel;
-
-//require_once '../BaseController.php';
+use App\Models\UserModel;
 
 class Kasir extends BaseController
 {
     public function __construct()
     {
-        
-        if (session()->get('role') !== "kasir" && session()->get('role') !=="admin") {
+        if (session()->get('role') !== "kasir" && session()->get('role') !== "admin") {
             echo 'Access denied';
             exit;
-            
         }
     }
+
     public function index()
     {
         $sess = session();
@@ -28,28 +25,22 @@ class Kasir extends BaseController
         $data['surename'] = $surename;
 
         $model = new BarangModel;
-        $data['result']=$model->findAll();
+        $data['result'] = $model->findAll();
 
-        echo view("waserda/kasir",$data);
+        echo view("waserda/kasir", $data);
     }
-    
+
     public function kasir()
     {
-        $sess = session();
-        $role = $sess->get('role');
-        $username = $sess->get('username');
-        $surename = $sess->get('surename');
 
-        $result['role'] = $role;
-        $result['username'] = $username;
-        $result['surename'] = $surename;
-       
         $barangModel = new BarangModel();
         $result = [];
 
         if ($this->request->isAJAX()) {
             $q = $this->request->getVar('q');
-            $result = $barangModel->like('nama_barang', $q)->findAll();
+            $result = $barangModel->like('nama_barang', $q)
+                ->orLike('barcode', $q)
+                ->findAll();
 
             return view('components/tabelbarangtransaksi', ['result' => $result]);
         }
@@ -57,38 +48,36 @@ class Kasir extends BaseController
         return view('waserda/transaksi', ['result' => $result]);
     }
 
- 
-    public function completeTransaction()
+        public function selesaitransaksi()
     {
         if ($this->request->getMethod() === 'post') {
             $penjualanModel = new PenjualanModel();
             $itemTerjualModel = new ItemTerjualModel();
             $stokModel = new StokModel();
-    
-            $totalBelanja = $this->request->getVar('total_belanja');
-            if (is_null($totalBelanja)) {
-                return $this->response->setJSON(['success' => false, 'message' => 'Total belanja is null']);
-            }
-    
+
             $data = [
                 'id_anggota' => $this->request->getVar('id_anggota'),
                 'metode_pembayaran' => $this->request->getVar('metode_pembayaran'),
                 'tanggal' => date('Y-m-d H:i:s'),
                 'id_users' => session()->get('id'), // assuming you store user id in session
-                'total_belanja' => $totalBelanja,
+                'total_belanja' => $this->request->getVar('total_belanja'),
                 'struk' => 'STRUK_' . time() // Generate a simple struk value
             ];
-    
+
             // Save the transaction
             $penjualanModel->insert($data);
             $penjualanId = $penjualanModel->insertID();
-    
+
+            $transactionSuccessful = true;
+            $errorMessage = '';
+
             // Save the transaction details
             $cartItems = $this->request->getVar('cart');
             foreach ($cartItems as $item) {
                 // Fetch the stock entry for the current item
                 $stockEntries = $stokModel->getstokbarang($item['id_barang']);
-                
+
+                $itemProcessed = false;
                 foreach ($stockEntries as $stockEntry) {
                     if ($stockEntry['kuantitas'] >= $item['quantity']) {
                         // Update the stock quantity and sales count
@@ -96,7 +85,7 @@ class Kasir extends BaseController
                             'kuantitas' => $stockEntry['kuantitas'] - $item['quantity'],
                             'terjual' => $stockEntry['terjual'] + $item['quantity']
                         ]);
-    
+
                         // Save the transaction detail with the correct stock ID
                         $detailData = [
                             'id_penjualan' => $penjualanId,
@@ -108,21 +97,57 @@ class Kasir extends BaseController
                             'id_stok' => $stockEntry['id_stok']
                         ];
                         $itemTerjualModel->insert($detailData);
+                        $itemProcessed = true;
                         break;
-                    } else {
-                        // Handle case where stock is insufficient
-                        return $this->response->setJSON(['success' => false, 'message' => 'Insufficient stock for item ' . $item['id_barang']]);
                     }
                 }
+
+                if (!$itemProcessed) {
+                    $transactionSuccessful = false;
+                    $errorMessage = 'Insufficient stock for item ' . $item['id_barang'];
+                    break;
+                }
             }
-    
-            return $this->response->setJSON(['success' => true]);
+
+            if ($transactionSuccessful) {
+                session()->setFlashdata('success', 'Transaction completed successfully');
+                return redirect()->to(base_url('waserda/kasir/receipt/' . $penjualanId));
+            } else {
+                session()->setFlashdata('error', $errorMessage);
+                return redirect()->to(base_url('waserda/kasir'));
+            }
         }
+    }
+
+    public function receipt($id_penjualan)
+    {
+        $penjualanModel = new PenjualanModel();
+        $itemTerjualModel = new ItemTerjualModel();
+        $barangModel = new BarangModel(); // Add this line to include the BarangModel
     
-        return $this->response->setJSON(['success' => false]);
+        // Fetch the main transaction details
+        $transaction = $penjualanModel->find($id_penjualan);
+        
+        // Fetch the items sold in this transaction
+        $items = $itemTerjualModel->where('id_penjualan', $id_penjualan)->findAll();
+    
+        // Fetch additional item details if needed
+        foreach ($items as &$item) {
+            $itemDetails = $barangModel->find($item['id_barang']); // Fetch the barang details using the BarangModel
+            $item['nama_barang'] = $itemDetails['nama_barang'];  // Assuming this field exists in the barang table
+        }
+        
+        // Pass the data to the view
+        $data = [
+            'transaction' => $transaction,
+            'items' => $items
+        ];
+        
+        return view('waserda/receipt', $data);
     }
     
-    //controller produk/barang
+    
+    // Controller produk/barang
     public function edit_produk($id_barang)
     {
         $sess = session();
@@ -130,16 +155,49 @@ class Kasir extends BaseController
         $data['surename'] = $surename;
 
         $model = new BarangModel;
-        $data['barang'] = $model->where('id_barang',$id_barang)->first();
+        $data['barang'] = $model->where('id_barang', $id_barang)->first();
 
-        return view('waserda/edit_produk',$data);
+        return view('waserda/edit_produk', $data);
     }
 
-    //controller penjualan
+    // Controller penjualan
     public function data_penjualan()
-    { $sess = session();
+    {
+        $sess = session();
         $surename = $sess->get('surename');
         $data['surename'] = $surename;
-        echo view("waserda/data_penjualan",$data);
+        
+        $penjualanModel = new PenjualanModel();
+        $userModel = new UserModel();
+
+        $searchQuery = $this->request->getGet('q');
+    
+        // Get the current page from the query string, defaulting to the first page
+        $page = $this->request->getVar('page') ?? 1;
+    
+        //query pencarian jika di inputkan
+        if($searchQuery) {
+            $penjualanModel->select('penjualan.*, users.surename as nama_petugas')
+                            ->join('users', 'users.id = penjualan.id_users')
+                            ->groupStart()
+                            ->like('penjualan.struk',$searchQuery)
+                            ->orLike('users.surename', $searchQuery)
+                            ->groupEnd();
+
+        }else{
+            //jika tidak ada inputan pencarian
+            $penjualanModel->select('penjualan.*, users.surename as nama_petugas')
+            ->join('users', 'users.id = penjualan.id_users');
+        }
+        // Fetch paginated data
+        $penjualan = $penjualanModel->paginate(10, 'group1'); // 10 records per page
+    
+    
+        $data['result'] = $penjualan;
+        $data['pager'] = $penjualanModel->pager;
+        $data['searchQuery'] = $searchQuery;
+    
+        echo view("waserda/data_penjualan", $data);
     }
+    
 }

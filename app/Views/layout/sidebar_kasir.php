@@ -32,7 +32,7 @@
           Kasir Waserda
         </a>
       </li>
-      <li>
+      <li> 
         <a style="text-decoration:none;color:white;" href="<?=base_url('/waserda/barang') ?>" 
         <?php
             if($_SERVER['REQUEST_URI'] ==="/waserda/barang"){
@@ -45,20 +45,30 @@
           Data Barang
         </a>
       </li>
-      <li>
-        <a style="text-decoration:none; color:white;" href="<?=base_url('/waserda/data_penjualan') ?>" 
-        <?php
+      <li class="mb-1"><button style="text-decoration:none;color:white;" class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+          Data Penjualan</button>
+        <div class="collapse" id="home-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li class="ms-3"><a style="text-decoration:none;color:white;" href="<?=base_url('/waserda/data_penjualan') ?>" class="link-dark rounded<?php
             if($_SERVER['REQUEST_URI'] ==="/waserda/data_penjualan"){
-              echo 'class="nav-link active"';
+              echo ' nav-link active';
             }else{
-              echo 'class="nav-link"';
+              echo ' nav-link';
             }
-          ?>
-          >
-          Data Penjualan
-        </a>
+          ?>">Penjualan</a></li>
+            <li class="ms-3"><a style="text-decoration:none;color:white;" href="<?=base_url('/waserda/report') ?>" class="link-dark rounded<?php
+            if($_SERVER['REQUEST_URI'] ==="/waserda/report"){
+              echo ' nav-link active';
+            }else{
+              echo ' nav-link';
+            }
+          ?>">Updates</a></li>
+            <li class="ms-3"><a style="text-decoration:none;color:white;" href="#" class="link-dark rounded">Reports</a></li>
+          </ul>
+        </div>
       </li>
     </ul>
+    <button class="btn btn-secondary" id="sidebar-close-button"><i class="fas fa-times"></i> Close</button>
     <hr>
   </div>
 
@@ -68,3 +78,4 @@
         border-radius: 0.25rem;
     }
   </style>
+  

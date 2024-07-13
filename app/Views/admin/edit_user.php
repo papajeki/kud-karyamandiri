@@ -11,9 +11,9 @@
         <div class="form-group">
             <label for="roles">Posisi Kerja</label>
             <select class="form-select" aria-label="Default select example" id="roles" name="roles">
-                <option selected><?php echo $users['roles'] ?></option>
-                <option value="admin">Admin</option>
-                <option value="kasir">Kasir</option>
+                <option selected><?php echo Strtoupper($users['roles']) ?></option>
+                <option value="admin">ADMIN</option>
+                <option value="kasir">KASIR</option>
                 <option value="ksp">KSP</option>
             </select>
         </div>

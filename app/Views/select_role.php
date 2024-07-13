@@ -34,7 +34,7 @@
 		<?php }?>
 
 		<?php if($role === 'ksp' || $role == 'admin'){ ?>
-		<a href="" class="d-flex" style="
+		<a href="/ksp" class="d-flex" style="
 			justify-content:center;
 			align-items:center;
 			min-height:12em;

@@ -37,11 +37,10 @@
             <?php endif; ?>
         </tbody>
     </table>
-</div>
-
-<!-- Pagination Links -->
-<div class="d-flex justify-content-center">
-    <?= $pager->links() ?>
+    
+    <div class="d-flex justify-content-center">
+            <?= $pager->links('group1', 'bootstrap_pagination'); ?>
+        </div>
 </div>
 
 <!-- Edit Modal -->
