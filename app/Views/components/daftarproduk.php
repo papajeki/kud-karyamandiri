@@ -13,10 +13,10 @@
             <?php if (!empty($result)): ?>
                 <?php foreach ($result as $index => $row): ?>
                 <tr>
-                    <th scope="row"><?= $index + 1 + ($pager->getCurrentPage() - 1) * $pager->getPerPage(); ?></th>
+                    <td scope="row"><?= $index + 1 + ($pager->getCurrentPage() - 1) * $pager->getPerPage(); ?></td>
                     <td><?= $row['nama_barang']; ?></td>
                     <td><?= $row['barcode']; ?></td>
-                    <td><?= $row['harga_jual']; ?></td>
+                    <td style="text-align: right;"><?= number_format($row['harga_jual'], 0, ',', '.'); ?></td>
                     <td>
                         <div class="d-flex" style="gap:1em; justify-content: center;">
                             <button class="btn btn-primary edit-button" style="border-radius: 5px;" 

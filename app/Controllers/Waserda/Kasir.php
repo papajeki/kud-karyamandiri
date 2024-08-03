@@ -48,13 +48,13 @@ class Kasir extends BaseController
         return view('waserda/transaksi', ['result' => $result]);
     }
 
-        public function selesaitransaksi()
+    public function selesaitransaksi()
     {
         if ($this->request->getMethod() === 'post') {
             $penjualanModel = new PenjualanModel();
             $itemTerjualModel = new ItemTerjualModel();
             $stokModel = new StokModel();
-
+    
             $data = [
                 'id_anggota' => $this->request->getVar('id_anggota'),
                 'metode_pembayaran' => $this->request->getVar('metode_pembayaran'),
@@ -63,61 +63,82 @@ class Kasir extends BaseController
                 'total_belanja' => $this->request->getVar('total_belanja'),
                 'struk' => 'STRUK_' . time() // Generate a simple struk value
             ];
-
+    
+            // Mulai Transaksi
+            $db = \Config\Database::connect();
+            $db->transStart();
+    
             // Save the transaction
             $penjualanModel->insert($data);
             $penjualanId = $penjualanModel->insertID();
-
+    
             $transactionSuccessful = true;
             $errorMessage = '';
-
+    
             // Save the transaction details
             $cartItems = $this->request->getVar('cart');
             foreach ($cartItems as $item) {
-                // Fetch the stock entry for the current item
+                // Fetch the stock entries for the current item
                 $stockEntries = $stokModel->getstokbarang($item['id_barang']);
-
-                $itemProcessed = false;
+    
+                $remainingQuantity = $item['quantity'];
+    
                 foreach ($stockEntries as $stockEntry) {
-                    if ($stockEntry['kuantitas'] >= $item['quantity']) {
+                    if ($remainingQuantity <= 0) {
+                        break;
+                    }
+    
+                    $availableQuantity = $stockEntry['kuantitas'] - $stockEntry['terjual'];
+    
+                    if ($availableQuantity > 0) {
+                        $quantityToDeduct = min($remainingQuantity, $availableQuantity);
+    
                         // Update the stock quantity and sales count
                         $stokModel->update($stockEntry['id_stok'], [
-                            'kuantitas' => $stockEntry['kuantitas'] - $item['quantity'],
-                            'terjual' => $stockEntry['terjual'] + $item['quantity']
+                            'terjual' => $stockEntry['terjual'] + $quantityToDeduct
                         ]);
-
+    
                         // Save the transaction detail with the correct stock ID
                         $detailData = [
                             'id_penjualan' => $penjualanId,
                             'id_barang' => $item['id_barang'],
-                            'jumlah' => $item['quantity'],
+                            'jumlah' => $quantityToDeduct,
                             'harga' => $item['total_price'] / $item['quantity'],
                             'tanggal' => date('Y-m-d H:i:s'),
                             'id_users' => session()->get('id'), // assuming you store user id in session
                             'id_stok' => $stockEntry['id_stok']
                         ];
                         $itemTerjualModel->insert($detailData);
-                        $itemProcessed = true;
-                        break;
+    
+                        $remainingQuantity -= $quantityToDeduct;
                     }
                 }
-
-                if (!$itemProcessed) {
+    
+                if ($remainingQuantity > 0) {
                     $transactionSuccessful = false;
                     $errorMessage = 'Insufficient stock for item ' . $item['id_barang'];
                     break;
                 }
             }
-
+    
             if ($transactionSuccessful) {
+                $db->transCommit(); // Commit jika semua berhasil
                 session()->setFlashdata('success', 'Transaction completed successfully');
-                return redirect()->to(base_url('waserda/kasir/receipt/' . $penjualanId));
+                return redirect()->to(base_url('waserda/kasir/redirect_to_receipt/' . $penjualanId));
             } else {
+                $db->transRollback(); // Rollback jika ada kesalahan
                 session()->setFlashdata('error', $errorMessage);
                 return redirect()->to(base_url('waserda/kasir'));
             }
         }
     }
+    
+    
+    public function redirect_to_receipt($id_penjualan)
+{
+    $data['id_penjualan'] = $id_penjualan;
+    return view('waserda/redirect_receipt', $data);
+}
 
     public function receipt($id_penjualan)
     {
@@ -182,12 +203,14 @@ class Kasir extends BaseController
                             ->groupStart()
                             ->like('penjualan.struk',$searchQuery)
                             ->orLike('users.surename', $searchQuery)
-                            ->groupEnd();
+                            ->groupEnd()
+                            ->orderBy('penjualan.tanggal','DESC');
 
         }else{
             //jika tidak ada inputan pencarian
             $penjualanModel->select('penjualan.*, users.surename as nama_petugas')
-            ->join('users', 'users.id = penjualan.id_users');
+            ->join('users', 'users.id = penjualan.id_users')
+            ->orderBy('penjualan.tanggal','DESC');
         }
         // Fetch paginated data
         $penjualan = $penjualanModel->paginate(10, 'group1'); // 10 records per page

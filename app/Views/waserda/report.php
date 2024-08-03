@@ -25,9 +25,9 @@
                 <thead>
                     <tr>
                         <th>Product ID</th>
-                        <th>Product Name</th>
-                        <th>Total Quantity Sold</th>
-                        <th>Total Earnings</th>
+                        <th>Nama Produk</th>
+                        <th>Jumlah Terjual</th>
+                        <th>Total Pendapatan</th>
                     </tr>
                 </thead>
                 <tbody>

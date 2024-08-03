@@ -27,7 +27,7 @@
             <tbody>
                 <?php if (!empty($result)): ?>
                     <?php foreach ($result as $row): ?>
-                        <tr>
+                        <tr onclick="window.location='<?= base_url('waserda/kasir/receipt/' . $row['id_penjualan']); ?>';" style="cursor: pointer;">
                             <td><?= $row['tanggal']; ?></td>
                             <td><?= $row['struk']; ?></td>
                             <td><?= $row['total_belanja']; ?></td>

@@ -17,7 +17,7 @@
                     <td><?= $stok['nama_barang']; ?></td>
                     <td><?= $stok['tanggal']; ?></td>
                     <td><?= $stok['kuantitas']; ?></td>
-                    <td><?= $stok['harga_beli']; ?></td>
+                    <td><?= number_format( $stok['harga_beli'], 0, ',','.'); ?></td>
                     <td><?= $stok['terjual']; ?></td>
                     <td>
                     <div class="d-flex" style="gap:1em; justify-content: center;">

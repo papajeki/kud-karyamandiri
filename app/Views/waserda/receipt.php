@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .receipt-container {
-            max-width: 800px;
+            max-width: 60mm;
             margin: 20px auto;
             padding: 20px;
             border: 1px solid #ddd;
@@ -18,30 +18,30 @@
 <body>
 
 <div class="receipt-container">
-    <h2 class="text-center">Receipt</h2>
+    <h2 class="text-center">Karya Mandiri</h2>
     <hr>
-    <p><strong>Date:</strong> <?= date('d-m-Y H:i:s', strtotime($transaction['tanggal'])) ?></p>
-    <p><strong>Transaction ID:</strong> <?= $transaction['id_penjualan'] ?></p>
-    <p><strong>Total:</strong> Rp.<?= number_format($transaction['total_belanja'], 2, ',', '.') ?></p>
+    <p>Date: <?= date('d-m-Y H:i:s', strtotime($transaction['tanggal'])) ?></p>
+    <p>Struk Number: <?= $transaction['struk'] ?></p>
+    <p>Total: Rp.<?= number_format($transaction['total_belanja'], 2, ',', '.') ?></p>
 
-    <table class="table table-bordered mt-4">
+    <table class="table mt-4 table-sm">
         <thead>
             <tr>
-                <th>No</th>
-                <th>Item Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
+                <th style="font-size: 8px;">No</th>
+                <th style="font-size: 8px;">Name</th>
+                <th style="font-size: 8px;">Qty</th>
+                <th style="font-size: 8px;">Price</th>
+                <th style="font-size: 8px;">Total</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($items as $index => $item): ?>
                 <tr>
-                    <td><?= $index + 1 ?></td>
-                    <td><?= $item['nama_barang'] ?></td>
-                    <td><?= $item['jumlah'] ?></td>
-                    <td>Rp.<?= number_format($item['harga'], 2, ',', '.') ?></td>
-                    <td>Rp.<?= number_format($item['harga'] * $item['jumlah'], 2, ',', '.') ?></td>
+                    <td style="font-size: 8px;"><?= $index + 1 ?></td>
+                    <td style="font-size: 8px;"><?= $item['nama_barang'] ?></td>
+                    <td style="font-size: 8px;"><?= $item['jumlah'] ?></td>
+                    <td style="font-size: 8px;">Rp.<?= number_format($item['harga'], 2, ',', '.') ?></td>
+                    <td style="font-size: 8px;">Rp.<?= number_format($item['harga'] * $item['jumlah'], 2, ',', '.') ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

@@ -22,7 +22,6 @@ public function process()
     if($data){
         $pass = $data['password'];
 
-        $debugStr = "";
         $verify_pass = password_verify($password, $pass);
 
         // if($verify_pass){

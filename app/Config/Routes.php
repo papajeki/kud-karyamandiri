@@ -10,6 +10,9 @@ use CodeIgniter\Router\RouteCollection;
 //$routes->get('/dashboard_admin', 'Home::index',['filter' => 'auth']);
 
 $routes->get('/testdatabaseconnection', 'TestDatabaseConnection::index');
+$routes->add('download/(:any)', 'FileController::download/$1');
+$routes->get('export-excel', 'Waserda\Penjualan::exportExcel');
+
 
 
 //login
@@ -41,6 +44,7 @@ $routes->group('waserda',function($routes){
     //waserda kasir (transaksi)
     $routes->add('kasir','Waserda\Kasir::kasir');
     $routes->add('kasir/selesaitransaksi', 'Waserda\Kasir::selesaitransaksi');
+    $routes->get('kasir/redirect_to_receipt/(:num)', 'Waserda\Kasir::redirect_to_receipt/$1');
     $routes->get('kasir/receipt/(:num)' , 'Waserda\Kasir::receipt/$1');
     //produk waserda
     $routes->get('barang','Waserda\Barang::produk');
@@ -56,8 +60,26 @@ $routes->group('waserda',function($routes){
     //riwayat transaksi
     $routes->get('data_penjualan','Waserda\Kasir::data_penjualan');
     $routes->add('report', 'Waserda\Penjualan::index');
+    $routes->get('labapenjualan', 'Waserda\Penjualan::laba');
 });
 
 $routes->group('ksp',function($routes){
-    $routes->get('/', 'Ksp\KSP::index');
+    $routes->get('/', 'Ksp\KSP::index',['filter' => 'auth']);
+    //keanggotaan
+    $routes->get('anggota', 'Ksp\KSP::anggota');
+    $routes->get('anggotaumum', 'Ksp\KSP::umum');
+    $routes->add('tambahanggota', 'Ksp\KSP::tambahanggota');
+    $routes->post('edit_anggota/(:num)', 'Ksp\KSP::edit_anggota/$1');
+    //simpanan
+    $routes->get('tabungan_kapling', 'Ksp\Simpan::simpanan_kapling');
+    $routes->get('tabungan_umum', 'Ksp\Simpan::simpanan_umum');
+    $routes->add('bukutabungan', 'Ksp\Simpan::tambah_tabungan');
+    $routes->add('tabungan_detail/(:num)', 'Ksp\Simpan::tabungan_detail/$1');
+    $routes->add('simpan_transaksi/(:num)', 'Ksp\Simpan::simpan_transaksi/$1');
+    $routes->add('tarik_transaksi/(:num)', 'Ksp\Simpan::tarik_transaksi/$1');
+    //pinjaman
+    $routes->get('pinjaman','Ksp\Pinjaman::daftar_peminjam');
+    $routes->add('pinjaman_detail/(:num)', 'Ksp\Pinjaman::pinjaman_detail/$1');
+    $routes->add('pembayaran/(:num)', 'Ksp\Pinjaman::pembayaran/$1');
+    $routes->add('tambah_pinjaman', 'Ksp\Pinjaman::tambah_pinjaman');
 });

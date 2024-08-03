@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .collapse-horizontal {
             position: relative;
@@ -63,6 +63,9 @@
             $('#sidebar-close-button').on('click', function () {
                 $('#sidebarcollapse').collapse('hide');
             });
+        });
+        $(document).ready(function () {
+            $('[data-bs-toggle="popover"]').popover();
         });
     </script>
 </body>
