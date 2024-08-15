@@ -38,7 +38,7 @@ $routes->group('admin',['filter' => 'auth'],function($routes){
     // $routes->post('input_harga_sawit', 'Admin\Admin::input_harga_sawit');
 });
 //GROUP ROUTE WASERDA
-$routes->group('waserda',function($routes){
+$routes->group('waserda',['filter' => 'auth'],function($routes){
 // kud-karyamandiri/waserda/
     $routes->get('/','Waserda\Kasir::index');
     //waserda kasir (transaksi)
@@ -61,6 +61,10 @@ $routes->group('waserda',function($routes){
     $routes->get('data_penjualan','Waserda\Kasir::data_penjualan');
     $routes->add('report', 'Waserda\Penjualan::index');
     $routes->get('labapenjualan', 'Waserda\Penjualan::laba');
+    $routes->get('credits', 'Waserda\Credits::credits');
+    $routes->get('credits/credits_detail/(:num)', 'Waserda\Credits::detail/$1');
+    $routes->post('pelunasan/(:num)', 'Waserda\Credits::pelunasan/$1');
+
 });
 
 $routes->group('ksp',function($routes){
@@ -82,4 +86,19 @@ $routes->group('ksp',function($routes){
     $routes->add('pinjaman_detail/(:num)', 'Ksp\Pinjaman::pinjaman_detail/$1');
     $routes->add('pembayaran/(:num)', 'Ksp\Pinjaman::pembayaran/$1');
     $routes->add('tambah_pinjaman', 'Ksp\Pinjaman::tambah_pinjaman');
+    //pengaturan
+    $routes->get('pengaturan', 'Ksp\Pinjaman::pengaturan');
+    $routes->add('pengaturan-nominal', 'Ksp\Pengaturan::nominal');
+    $routes->add('pengaturan-tempo', 'Ksp\Pengaturan::tempo');
+    $routes->add('pengaturan-kelompok', 'Ksp\Pengaturan::kelompok');
+    $routes->post('edit_nominal', 'Ksp\Pengaturan::kelompok');
+    $routes->post('tambah_nominal', 'Ksp\Pengaturan::tambah_nominal');
+    $routes->add('edit_nominal', 'Ksp\Pengaturan::edit_nominal');
+    $routes->add('hapus_nominal/(:num)', 'Ksp\Pengaturan::hapus_nominal/$1');
+    $routes->post('tambah_tempo', 'Ksp\Pengaturan::tambah_tempo');
+    $routes->post('edit_tempo', 'Ksp\Pengaturan::edit_tempo');
+    $routes->post('hapus_tempo/(:num)', 'Ksp\Pengaturan::hapus_tempo/$1');
+    $routes->post('tambah_kelompok', 'Ksp\Pengaturan::tambah_kelompok');
+    $routes->post('edit_kelompok', 'Ksp\Pengaturan::edit_kelompok');
+    $routes->post('hapus_kelompok/(:num)', 'Ksp\Pengaturan::hapus_kelompok/$1');
 });

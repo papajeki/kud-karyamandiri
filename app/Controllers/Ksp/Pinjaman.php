@@ -195,4 +195,8 @@ class Pinjaman extends BaseController{
         return view('ksp/tambahpinjaman', $data);
     }
     
+    public function pengaturan(){
+
+        return view('ksp/pengaturan');
+    }
 }

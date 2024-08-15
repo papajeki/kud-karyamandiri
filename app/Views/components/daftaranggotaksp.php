@@ -59,9 +59,9 @@
                     <div class="mb-3">
                         <label for="kelompok_tani" class="form-label">Kelompok Tani</label>
                         <select class="form-select" aria-label="Default select example" id="kelompok_tani" name="kelompok_tani">
-                            <option value="MM1">MM1</option>
-                            <option value="MM2">MM2</option>
-                            <option value="MM3">MM3</option>
+                        <?php foreach ($kelompok as $nilai): ?>
+                        <option value="<?= esc($nilai['kelompok_tani']) ?>"><?= ($nilai['kelompok_tani']) ?></option>
+                        <?php endforeach ?>
                         </select>
                     </div>
                     <div class="mb-3">

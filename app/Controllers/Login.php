@@ -41,7 +41,7 @@ public function process()
             $session->set($ses_data);
             return redirect()->to('/index');
         }else{
-            $session->setFlashdata('msg',"wrongpassword".$password);
+            $session->setFlashdata('msg',"wrongpassword");
             return redirect()->to('/login');
         }
     }else{

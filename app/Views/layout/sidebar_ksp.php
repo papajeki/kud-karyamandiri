@@ -45,6 +45,12 @@
           Pinjaman
         </a>
       </li>
+      <li class="nav-item navItem">
+            <a href="<?= base_url('/ksp/pengaturan') ?>" 
+            class="nav-link <?=($_SERVER['REQUEST_URI'] === "/ksp/pengaturan") ? 'active' : '' ?>"
+            style="text-decoration: none; color:white;"><i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+          Pengaturan</a>
+      </li>
     </ul>
     <hr>
     <button class="btn btn-secondary" id="sidebar-close-button"><i class="fas fa-times"></i> Close</button>

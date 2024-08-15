@@ -44,7 +44,14 @@
             }else{
               echo ' nav-link';
             }
-          ?>">Laporan</a></li>
+          ?>">Laporan Penjualan</a></li>
+            <li class="nav-item navItem ms-3"><a style="text-decoration:none;color:white;" href="<?=base_url('/waserda/labapenjualan') ?>" class="link-dark rounded<?php
+            if($_SERVER['REQUEST_URI'] ==="/waserda/labapenjualan"){
+              echo ' nav-link active';
+            }else{
+              echo ' nav-link';
+            }
+          ?>">Laporan Laba</a></li>
           </ul>
         </div>
       </li>

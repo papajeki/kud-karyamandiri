@@ -2,12 +2,15 @@
 
 namespace App\Controllers\Waserda;
 use App\Controllers\BaseController;
+use App\Models\AnggotaModel;
 use App\Models\BarangModel;
 use App\Models\ItemTerjualModel;
 use App\Models\PenjualanModel;
 use App\Models\StokModel;
 use App\Models\UserModel;
-
+use App\Models\CreditsModel;
+use DateTime;
+use DateInterval;
 class Kasir extends BaseController
 {
     public function __construct()
@@ -20,33 +23,92 @@ class Kasir extends BaseController
 
     public function index()
     {
-        $sess = session();
-        $surename = $sess->get('surename');
-        $data['surename'] = $surename;
-
-        $model = new BarangModel;
-        $data['result'] = $model->findAll();
-
-        echo view("waserda/kasir", $data);
+        $stokModel = new StokModel();
+        $itemTerjualModel = new ItemTerjualModel();
+        $barangModel = new BarangModel();
+    
+        $currentDate = new DateTime();
+        $startDate = $currentDate->sub(new DateInterval('P30D'))->format('Y-m-d');
+    
+        // Query untuk mendapatkan produk dengan penjualan tertinggi
+        $topsell = $itemTerjualModel->select('barang.nama_barang, SUM(item_terjual.jumlah * item_terjual.harga) as total_penjualan')
+                                    ->join('barang', 'barang.id_barang = item_terjual.id_barang')  // Perbaikan join
+                                    ->where('item_terjual.tanggal >=', $startDate)
+                                    ->groupBy('barang.id_barang')
+                                    ->orderBy('total_penjualan', 'DESC')
+                                    ->first();
+    
+        // Mengambil data stok 30 hari terakhir
+        $stokData = $stokModel->select('DATE(tanggal) as tanggal, SUM(kuantitas * harga_beli) as total_beli')
+                              ->where('tanggal >=', $startDate)
+                              ->groupBy('DATE(tanggal)')
+                              ->orderBy('tanggal', 'ASC')
+                              ->findAll();
+    
+        // Mengambil data penjualan 30 hari terakhir
+        $penjualanData = $itemTerjualModel->select('DATE(tanggal) as tanggal, SUM(jumlah * harga) as total_jual')
+                                          ->where('tanggal >=', $startDate)
+                                          ->groupBy('DATE(tanggal)')
+                                          ->orderBy('tanggal', 'ASC')
+                                          ->findAll();
+    
+        // Penggabungan data berdasarkan tanggal
+        $mergedData = [];
+        foreach ($stokData as $stok) {
+            $mergedData[$stok['tanggal']]['tanggal'] = $stok['tanggal'];
+            $mergedData[$stok['tanggal']]['total_beli'] = $stok['total_beli'];
+        }
+    
+        foreach ($penjualanData as $penjualan) {
+            $mergedData[$penjualan['tanggal']]['tanggal'] = $penjualan['tanggal'];
+            $mergedData[$penjualan['tanggal']]['total_jual'] = $penjualan['total_jual'];
+        }
+    
+        // Mengisi data yang kosong dengan 0 untuk tanggal yang tidak ada
+        $completeData = [];
+        for ($i = 0; $i < 30; $i++) {
+            $date = (new DateTime())->sub(new DateInterval('P' . (29 - $i) . 'D'))->format('Y-m-d');
+            $completeData[] = [
+                'tanggal' => $date,
+                'total_beli' => isset($mergedData[$date]['total_beli']) ? $mergedData[$date]['total_beli'] : 0,
+                'total_jual' => isset($mergedData[$date]['total_jual']) ? $mergedData[$date]['total_jual'] : 0
+            ];
+        }
+    
+        $data = [
+            'financialData' => $completeData,
+            'topsell' => $topsell
+        ];
+    
+        return view("waserda/kasir", $data);
     }
+    
+    
 
     public function kasir()
     {
-
         $barangModel = new BarangModel();
+        $anggotaModel = new AnggotaModel();
         $result = [];
-
+    
         if ($this->request->isAJAX()) {
             $q = $this->request->getVar('q');
             $result = $barangModel->like('nama_barang', $q)
                 ->orLike('barcode', $q)
                 ->findAll();
-
+    
             return view('components/tabelbarangtransaksi', ['result' => $result]);
         }
-
-        return view('waserda/transaksi', ['result' => $result]);
+    
+        // Ambil data anggota untuk dropdown
+        $anggotaList = $anggotaModel->findAll();
+        
+        return view('waserda/transaksi', [
+            'result' => $result,
+            'anggotaList' => $anggotaList,
+        ]);
     }
+    
 
     public function selesaitransaksi()
     {
@@ -54,6 +116,7 @@ class Kasir extends BaseController
             $penjualanModel = new PenjualanModel();
             $itemTerjualModel = new ItemTerjualModel();
             $stokModel = new StokModel();
+            $creditsModel = new CreditsModel();
     
             $data = [
                 'id_anggota' => $this->request->getVar('id_anggota'),
@@ -122,11 +185,21 @@ class Kasir extends BaseController
             }
     
             if ($transactionSuccessful) {
-                $db->transCommit(); // Commit jika semua berhasil
+                // Handle credit payment
+                if ($data['metode_pembayaran'] === 'credits') {
+                    $creditData = [
+                        'id_anggota' => $data['id_anggota'],
+                        'id_penjualan' => $penjualanId,
+                        'status' => 'belum lunas'
+                    ];
+                    $creditsModel->insert($creditData);
+                }
+    
+                $db->transCommit(); // Commit if all successful
                 session()->setFlashdata('success', 'Transaction completed successfully');
                 return redirect()->to(base_url('waserda/kasir/redirect_to_receipt/' . $penjualanId));
             } else {
-                $db->transRollback(); // Rollback jika ada kesalahan
+                $db->transRollback(); // Rollback if any errors
                 session()->setFlashdata('error', $errorMessage);
                 return redirect()->to(base_url('waserda/kasir'));
             }
@@ -223,4 +296,17 @@ class Kasir extends BaseController
         echo view("waserda/data_penjualan", $data);
     }
     
+
+ //kredit waserda
+ public function credits(){
+    $creditsModel = new CreditsModel();
+    $creditstotal = $creditsModel->select('credits.status,anggota.id_anggota, anggota.surename, anggota.kelompok_tani, SUM(penjualan.total_belanja) as total_credits')
+                                ->join('penjualan','credits.id_penjualan = penjualan.id_penjualan')
+                                ->join('anggota', 'anggota.id_anggota = credits.id_anggota')
+                                ->groupBy('credits.id_anggota')
+                                ->orderBy('kelompok_tani')
+                                ->findAll();                                                                                                                                                                                    
+    $data['credits'] =$creditstotal;
+    return view('waserda/credits', $data);
+ }
 }

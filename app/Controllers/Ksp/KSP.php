@@ -23,6 +23,8 @@ class KSP extends BaseController
 
     public function anggota() {
         $anggotamodel = new AnggotaModel();
+        $kelompoktani = new KelompokTaniModel();
+        $data ['kelompok'] = $kelompoktani->findAll();
     
         // Set the number of items per page
         $perPage = 10;
