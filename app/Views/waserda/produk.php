@@ -11,6 +11,11 @@
     <button class="btn btn-primary" type="submit" style="margin-inline-start: auto;">
         <a href="<?= base_url('waserda/create_barang')?>" style="text-decoration:none; color:white;">Tambah Produk</a></button>
 </div>
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
 
 <?= $this->include('components/daftarproduk') ?>
 

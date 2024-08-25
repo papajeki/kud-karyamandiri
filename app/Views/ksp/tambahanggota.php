@@ -6,7 +6,7 @@
     <form action="<?= base_url('/ksp/tambahanggota') ?>" method="post">
         <div class="form-group">
             <label for="nik">NIK</label>
-            <input type="number" class="form-control" id="nik" name="nik" required>
+            <input type="number" class="form-control" id="nik" minlength="16" name="nik" required>
         </div>
         <div class="form-group">
             <label for="surename">Nama Lengkap</label>

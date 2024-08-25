@@ -55,6 +55,14 @@
           </ul>
         </div>
       </li>
+      <li class="nav-item navItem">
+        <a href="<?=base_url('/waserda/credits') ?>"
+        class="nav-link <?= ($_SERVER['REQUEST_URI'] === "/waserda/credits") ? 'active' : '' ?>"
+        style="text-decoration:none;color:white;"
+        ><i class="fa-solid fa-credit-card" style="color: #ffffff;"></i>
+          Kredit Belanja
+        </a>
+      </li>
     </ul>
     <button class="btn btn-secondary" id="sidebar-close-button"><i class="fas fa-times"></i> Close</button>
     <hr>

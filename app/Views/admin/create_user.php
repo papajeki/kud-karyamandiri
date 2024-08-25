@@ -3,10 +3,13 @@
 
 <div class="container mt-5">
     <h2>Buat Akun Baru</h2>
-    <form action="<?=base_url('/admin/simpan')?>" method="post">
+    <form id="create-user" action="<?= base_url('/admin/simpan') ?>" method="post">
         <div class="form-group">
             <label for="username">UserName (Untuk Login)</label>
             <input type="text" class="form-control" id="username" name="username" required>
+            <div class="invalid-feedback">
+                Username Tidak Boleh Mengandung spasi
+            </div>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
@@ -26,7 +29,22 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+    </form>
 
+    <script>
+        document.getElementById('create-user').addEventListener('submit', function(event) {
+            var username = document.getElementById('username').value;
+            if (/\s/.test(username)) {
+                event.preventDefault();
+                var feedback = document.querySelector('#username ~ .invalid-feedback');
+                feedback.style.display = 'block'; // Tampilkan pesan kesalahan
+                document.getElementById('username').classList.add('is-invalid');
+            } else {
+                document.getElementById('username').classList.remove('is-invalid');
+                var feedback = document.querySelector('#username ~ .invalid-feedback');
+                feedback.style.display = 'none';
+            }
+        });
+    </script>
 
-<?= $this->endsection() ?>
+<?= $this->endSection() ?>

@@ -22,3 +22,6 @@
             <?php endif; ?>
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+        <?= $pager->links('group1', 'bootstrap_pagination'); ?>
+    </div>

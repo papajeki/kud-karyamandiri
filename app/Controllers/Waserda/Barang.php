@@ -63,6 +63,7 @@ class Barang extends BaseController{
             'harga_jual' => $this->request->getPost('harga_jual')
         ];
         $model->insert($data);
+        session()->setFlashdata('success', 'Data Barang berhasil disimpan!');
         return redirect("waserda/barang",$data);
         }
     return view('waserda/create_barang',$data);
@@ -113,10 +114,10 @@ class Barang extends BaseController{
             ];
             if ($model->update($id_barang, $data)) {
                 // Set success message and redirect
-                $sess->setFlashdata('success', 'Harga jual updated successfully.');
+                $sess->setFlashdata('success', 'Produk Berhasil diperbarui.');
             } else {
                 // Set error message and redirect
-                $sess->setFlashdata('error', 'Failed to update harga jual.');
+                $sess->setFlashdata('error', 'Failed to update data barang.');
             }
         } else {
             // Set validation errors
@@ -155,6 +156,7 @@ class Barang extends BaseController{
         ];
 
     $model->insert($data);
+    session()->setFlashdata('success', 'Stok Barang berhasil ditambah!');
     return redirect()->to('/waserda/stok_barang/' . $data['id_barang']);
     }
 
@@ -195,6 +197,7 @@ class Barang extends BaseController{
             'harga_beli' => $this->request->getPost('harga_beli')
         ];
         $model->update($id_stok,$update);
+        session()->setFlashdata('success', 'Stok Barang berhasil di update!');
         return redirect("waserda/barang");
     }
 }

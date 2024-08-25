@@ -1,6 +1,14 @@
 <?= $this->extend('layout_kasir') ?>
 <?= $this->section('content') ?>
 
+<div class="d-flex" style="margin:1em;">
+    <!-- search -->
+    <form class="d-flex" id="search-form">
+        <input class="form-control me-2" type="search" name="q" id="search-input" placeholder="Search" aria-label="Search" style="border-radius: 12em;" value="<?= isset($_GET['q']) ? esc($_GET['q']) : '' ?>">
+        <button class="btn btn-outline-success" type="button" id="search-button" style="border-radius: 12em;">Search</button>
+    </form>
+    <button class="btn btn-primary ms-auto" type="button" id="complete-transaction-button">Selesaikan Transaksi</button>
+</div>
 <?php if (session()->getFlashdata('success')): ?>
     <div class="alert alert-success">
         <?= session()->getFlashdata('success') ?>
@@ -12,17 +20,6 @@
         <?= session()->getFlashdata('error') ?>
     </div>
 <?php endif; ?>
-
-
-<div class="d-flex" style="margin:1em;">
-    <!-- search -->
-    <form class="d-flex" id="search-form">
-        <input class="form-control me-2" type="search" name="q" id="search-input" placeholder="Search" aria-label="Search" style="border-radius: 12em;" value="<?= isset($_GET['q']) ? esc($_GET['q']) : '' ?>">
-        <button class="btn btn-outline-success" type="button" id="search-button" style="border-radius: 12em;">Search</button>
-    </form>
-    <button class="btn btn-primary ms-auto" type="button" id="complete-transaction-button">Selesaikan Transaksi</button>
-</div>
-
 
 <!-- Product Table -->
 <div id="product-table-container" class="mb-5">

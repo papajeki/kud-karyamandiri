@@ -9,7 +9,7 @@
     <?php endif; ?>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form action="<?= base_url('/ksp/tambah_pinjaman') ?>" method="post" enctype="multipart/form-data">
+            <form action="<?= base_url('/ksp/tambah_pinjaman') ?>" method="post" enctype="multipart/form-data" id="loanForm">
                 <div class="mb-3">
                     <label for="id_anggota" class="form-label">Pilih Anggota</label>
                     <select class="form-select" aria-label="Pilih Peminjam" id="id_anggota" name="id_anggota">
@@ -44,10 +44,30 @@
                 <div class="mb-3">
                     <label for="bukti_disetujui" class="form-label">Upload Bukti Persetujuan</label>
                     <input class="form-control" type="file" id="bukti_disetujui" name="bukti_disetujui" required>
+                    <div class="invalid-feedback" id="fileError" style="display: none;">
+                        File harus berjenis .doc atau .pdf.
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Tambah Pinjaman</button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('loanForm').addEventListener('submit', function(event) {
+    var fileInput = document.getElementById('bukti_disetujui');
+    var filePath = fileInput.value;
+    var allowedExtensions = /(\.doc|\.pdf)$/i;
+    
+    if (!allowedExtensions.exec(filePath)) {
+        event.preventDefault();
+        document.getElementById('fileError').style.display = 'block';
+        fileInput.classList.add('is-invalid');
+    } else {
+        fileInput.classList.remove('is-invalid');
+        document.getElementById('fileError').style.display = 'none';
+    }
+});
+</script>
 <?= $this->endSection() ?>

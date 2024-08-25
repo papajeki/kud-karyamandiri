@@ -103,6 +103,7 @@ class KSP extends BaseController
             ];
             
             $anggotamodel->insert($data);
+            session()->setFlashdata('success', 'Data anggota berhasil ditambah!');
             return redirect()->to(base_url("ksp/anggota"));
         }
     
@@ -120,7 +121,7 @@ class KSP extends BaseController
         ];
         if ($anggotamodel->update($id_anggota, $data)) {
             // Set success message and redirect
-            $sess->setFlashdata('success', 'Harga jual updated successfully.');
+            $sess->setFlashdata('success', 'Data Anggota Telah diUpdate.');
         } else {
             // Set error message and redirect
             $sess->setFlashdata('error', 'Failed to update harga jual.');

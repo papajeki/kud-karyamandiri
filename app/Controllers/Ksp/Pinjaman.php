@@ -72,6 +72,8 @@ class Pinjaman extends BaseController{
         $pinjamanmodel = new PinjamanModel;
         $pembayaran = new PembayaranModel;
     
+        $perPage = 5;
+        $page = $this->request->getGet('page') ?? 1;
         // Ambil data pinjaman
         $data['pinjaman'] = $pinjamanmodel->select('pinjaman.id_pinjaman, pinjaman.nominal_pinjaman, pinjaman.tanggal_pinjaman, pinjaman.angsuran, pinjaman.bunga, pinjaman.status, 
                                                     pinjaman.bukti_disetujui, anggota.surename, anggota.handphone, anggota.kelompok_tani, anggota.nik')
@@ -82,7 +84,14 @@ class Pinjaman extends BaseController{
         // Check if pinjaman data is found
         if ($data['pinjaman']) {
             // Ambil data pembayaran jika data pinjaman ditemukan
-            $data['pembayaran'] = $pembayaran->where('id_pinjaman', $data['pinjaman']['id_pinjaman'])->findAll();
+            $builder = $pembayaran->select('pembayaran.*')
+                                    ->where('pembayaran.id_pinjaman',$id_pinjaman);
+            //$builder = $pembayaran->where('id_pinjaman', $data['pinjaman']['id_pinjaman'])->findAll();
+            $results = $builder->paginate($perPage, 'default', $page);
+            $pager=$builder->pager;
+            $data['pembayaran'] = $results;
+            $data['pager'] = $pager;
+
         } else {
             // Handle the case where no pinjaman is found
             $data['pinjaman'] = [];

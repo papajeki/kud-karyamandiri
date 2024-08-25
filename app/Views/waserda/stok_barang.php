@@ -12,6 +12,11 @@
 </div>
 
 <div class="container mt-5">
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
         <h1>Riwayat Stok Barang <?= $barang['nama_barang']; ?></h1>
 
         <!-- Jumlah Barang -->

@@ -9,13 +9,13 @@
             </div>
             <div class="form-group">
                 <label for="barcode">Barcode</label>
-                <input type="text" class="form-control" id="barcode" name="barcode" required>
+                <input type="number" maxlength="50" class="form-control" id="barcode" name="barcode" required>
             </div>
             <div class="form-group">
                 <label for="harga_jual">Harga Jual</label>
-                <input type="text" class="form-control" id="harga_jual" name="harga_jual" readonly>
+                <input type="number" minlength="3" class="form-control" id="harga_jual" name="harga_jual">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
         </form>
 </div>
 

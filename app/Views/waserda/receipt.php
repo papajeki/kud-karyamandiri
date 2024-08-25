@@ -18,11 +18,10 @@
 <body>
 
 <div class="receipt-container">
-    <h2 class="text-center">Karya Mandiri</h2>
+    <h5 class="text-center">Karya Mandiri</h5>
+    <p  class="text-center" style="font-size: 10px;"> <?= $transaction['struk'] ?></p>
     <hr>
-    <p>Date: <?= date('d-m-Y H:i:s', strtotime($transaction['tanggal'])) ?></p>
-    <p>Struk Number: <?= $transaction['struk'] ?></p>
-    <p>Total: Rp.<?= number_format($transaction['total_belanja'], 2, ',', '.') ?></p>
+    <p style="font-size: 8px;">Date: <?= date('d-m-Y H:i:s', strtotime($transaction['tanggal'])) ?></p>
 
     <table class="table mt-4 table-sm">
         <thead>
@@ -46,6 +45,7 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    <p style="font-size: 12px;">Total: Rp.<?= number_format($transaction['total_belanja'], 2, ',', '.') ?></p>
 
     <button class="btn btn-primary mt-3" onclick="window.print()">Print</button>
 </div>
