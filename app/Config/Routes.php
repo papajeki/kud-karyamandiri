@@ -102,3 +102,17 @@ $routes->group('ksp',function($routes){
     $routes->post('edit_kelompok', 'Ksp\Pengaturan::edit_kelompok');
     $routes->post('hapus_kelompok/(:num)', 'Ksp\Pengaturan::hapus_kelompok/$1');
 });
+
+$routes->group('kelompok', function($routes){
+    //dashboard
+    $routes->get('/', 'Kelompok\Ketua::dashboard');
+    $routes->add('panen','Kelompok\Ketua::panen');
+    $routes->add('anggota','Kelompok\Ketua::anggota');
+    $routes->get('detail_anggota/(:num)','Kelompok\Ketua::detail_anggota/$1');
+    $routes->add('gaji/(:num)', 'Kelompok\Ketua::gaji/$1');
+    $routes->get('potongan', 'Kelompok\Ketua::potongan');
+    $routes->post('tambahpotongan', 'Kelompok\Ketua::tambah_potongan');
+    $routes->post('edit_potongan', 'Kelompok\Ketua::edit_potongan');
+    $routes->get('hapus_potongan/(:num)', 'Kelompok\Ketua::hapus_potongan/$1');
+    $routes->get('riwayat_gaji/(:num)', 'Kelompok\Ketua::riwayat_gaji/$1');
+});

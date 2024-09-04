@@ -48,7 +48,7 @@
 		<?php }?>
 
 		<?php if($role === 'petani' || $role == 'admin'){ ?>
-		<a href="" class="d-flex" style="
+		<a href="/kelompok" class="d-flex" style="
 			justify-content:center;
 			align-items:center;
 			min-height:12em;

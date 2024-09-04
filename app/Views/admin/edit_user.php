@@ -15,12 +15,13 @@
                 <option value="admin">ADMIN</option>
                 <option value="kasir">KASIR</option>
                 <option value="ksp">KSP</option>
+                <option value="petani">Petani</option>
             </select>
         </div>
+        <div class="form-group">
+            <label for="password">Password (Kosongkan jika tidak ingin diubah)</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-
     </form>
-
-
-<?= $this->endsection() ?>
+<?= $this->endSection() ?>

@@ -27,21 +27,26 @@ class Simpan extends BaseController
         $perPage = 10;
     
         // Get the current page number from the URL, default to 1
-        $page = $this->request->getGet('page') ?? 1;        
+        $page = $this->request->getGet('page') ?? 1;
         $searchQuery = $this->request->getGet('q');
-         // Join Anggota dan Tabungan tabel
-         $builder = $anggotamodel->select('anggota.surename, anggota.handphone,tabungan.id_tabungan, tabungan.saldo, tabungan.status')
-         ->join('tabungan', 'tabungan.id_anggota = anggota.id_anggota')
-         ->where('tabungan.jenis_tabungan', 'tabungan kapling');        
-        if($searchQuery){
-             $builder->like('anggota.surename', $searchQuery)
-                    ->orLike('anggota.kelompok_tani', $searchQuery);
+    
+        // Join Anggota and Tabungan tables, including the related kelompok_tani table
+        $builder = $anggotamodel->select('anggota.surename, anggota.handphone, tabungan.id_tabungan, tabungan.saldo, tabungan.status, kelompok_tani.kelompok_tani')
+            ->join('tabungan', 'tabungan.id_anggota = anggota.id_anggota')
+            ->join('kelompok_tani', 'kelompok_tani.id_kelompoktani = anggota.id_kelompok')
+            ->where('tabungan.jenis_tabungan', 'tabungan kapling');
+    
+        if ($searchQuery) {
+            $builder->like('anggota.surename', $searchQuery)
+                    ->orLike('kelompok_tani.kelompok_tani', $searchQuery);
         }
+    
         $data['result'] = $builder->paginate($perPage, 'default', $page);
-        $data['pager'] = $builder->pager;    
-
+        $data['pager'] = $builder->pager;
+    
         return view('ksp/tabungan_kapling', $data);
     }
+    
 
     public function simpanan_umum(){
         $anggotamodel = new AnggotaModel;

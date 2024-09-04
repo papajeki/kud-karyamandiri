@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
+use App\Models\KelompokTaniModel;
 use App\Models\UserModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use PhpParser\Builder\Function_;
@@ -40,7 +41,9 @@ class Users extends BaseController
             'username' => $this->request->getPost('username'),
             'password' => password_hash($this->request->getVar('password'),PASSWORD_DEFAULT),
             'surename' => $this->request->getPost('surename'),
-            'roles' => $this->request->getPost('roles'),];
+            'roles' => $this->request->getPost('roles'),
+        'kelompok_tani' => $this->request->getPost('kelompok')];
+            
             $model->insert($data);
     
             return redirect()->to("admin/users");
@@ -56,6 +59,9 @@ class Users extends BaseController
         $data['role'] = $role;
         $data['username'] = $username;
         $data['surename'] = $surename;
+
+        $model = new KelompokTaniModel;
+        $data['kelompok'] = $model->findAll();
 
         return view("admin/create_user",$data);
     }
@@ -91,12 +97,26 @@ class Users extends BaseController
         return redirect()->to('/admin/users'); // Sesuaikan dengan halaman yang benars
     }
 
-    public Function update($id)
+    public function update($id)
     {
         $model = new UserModel();
-        $data=[ 'surename' => $this->request->getPost('surename'),
-        'roles' => $this->request->getPost('roles')];
-        $model->update($id,$data);
+        
+        // Data yang akan diupdate
+        $data = [
+            'surename' => $this->request->getPost('surename'),
+            'roles' => $this->request->getPost('roles')
+        ];
+    
+        // Jika password diisi, maka update password
+        $password =$this->request->getPost('password');
+        if (!empty($password)) {
+            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+    
+        // Update data ke database
+        $model->update($id, $data);
+        
         return redirect()->to('/admin/users');
     }
+    
 }

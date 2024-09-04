@@ -12,7 +12,7 @@
                 <select class="form-select" aria-label="default select example" id="id_anggota" name="id_anggota" onchange="toggleJenisTabungan()">
                     <option value="null" selected>Pilih Anggota</option>
                     <?php foreach($anggota as $member): ?>
-                        <option value="<?= esc($member['id_anggota']) ?>" data-kelompok="<?= esc($member['kelompok_tani']) ?>"><?= esc($member['surename']) ?></option>
+                        <option value="<?= esc($member['id_anggota']) ?>" data-kelompok="<?= esc($member['id_kelompok']) ?>"><?= esc($member['surename']) ?></option>
                     <?php endforeach; ?>
                 </select>
                 <?php if(isset($validation) && $validation->hasError('id_anggota')): ?>

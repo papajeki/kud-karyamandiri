@@ -24,7 +24,7 @@ class KSP extends BaseController
     public function anggota() {
         $anggotamodel = new AnggotaModel();
         $kelompoktani = new KelompokTaniModel();
-        $data ['kelompok'] = $kelompoktani->findAll();
+        $data['kelompok'] = $kelompoktani->findAll();
     
         // Set the number of items per page
         $perPage = 10;
@@ -36,16 +36,17 @@ class KSP extends BaseController
         $searchQuery = $this->request->getGet('q');
     
         // Initialize query builder
-        $anggota = $anggotamodel;
+        $anggota = $anggotamodel->select('anggota.*, kelompok_tani.kelompok_tani')
+                                ->join('kelompok_tani', 'kelompok_tani.id_kelompoktani = anggota.id_kelompok');
     
         // Apply search filter if search query is present
         if ($searchQuery) {
-            $anggota->like('surename', $searchQuery)
-                    ->orLike('kelompok_tani', $searchQuery);
+            $anggota->like('anggota.surename', $searchQuery)
+                   ->orLike('kelompok_tani.kelompok_tani', $searchQuery);
         }
     
         // Sort the results by 'kelompok_tani'
-        $anggota->orderBy('kelompok_tani', 'ASC');
+        $anggota->orderBy('kelompok_tani.kelompok_tani', 'ASC');
     
         // Fetch the paginated results
         $data['result'] = $anggota->paginate($perPage, 'default', $page);
@@ -98,7 +99,7 @@ class KSP extends BaseController
                 'nik' => $this->request->getPost('nik'),
                 'surename' => $this->request->getPost('surename'),
                 'username' => $this->request->getPost('username'),
-                'kelompok_tani' => $this->request->getPost('kelompok_tani'),
+                'id_kelompok' => $this->request->getPost('kelompok_tani'),
                 'handphone' => $this->request->getPost('handphone')
             ];
             
@@ -116,7 +117,7 @@ class KSP extends BaseController
         $data = [
             'surename' => $this->request->getPost('surename'),
             'nik' => $this->request->getPost('nik'),
-            'kelompok_tani' => $this->request->getPost('kelompok_tani'),
+            'id_kelompok' => $this->request->getPost('kelompok_tani'),
             'handphone' => $this->request->getPost('handphone')
         ];
         if ($anggotamodel->update($id_anggota, $data)) {

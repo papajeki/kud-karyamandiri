@@ -60,7 +60,7 @@
                         <label for="kelompok_tani" class="form-label">Kelompok Tani</label>
                         <select class="form-select" aria-label="Default select example" id="kelompok_tani" name="kelompok_tani">
                         <?php foreach ($kelompok as $nilai): ?>
-                        <option value="<?= esc($nilai['kelompok_tani']) ?>"><?= ($nilai['kelompok_tani']) ?></option>
+                        <option value="<?= esc($nilai['id_kelompoktani']) ?>"><?= ($nilai['kelompok_tani']) ?></option>
                         <?php endforeach ?>
                         </select>
                     </div>

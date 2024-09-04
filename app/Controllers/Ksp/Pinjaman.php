@@ -70,28 +70,29 @@ class Pinjaman extends BaseController{
     public function pinjaman_detail($id_pinjaman) {
         $anggotamodel = new AnggotaModel;
         $pinjamanmodel = new PinjamanModel;
-        $pembayaran = new PembayaranModel;
+        $pembayaranmodel = new PembayaranModel;
     
         $perPage = 5;
         $page = $this->request->getGet('page') ?? 1;
-        // Ambil data pinjaman
+    
+        // Ambil data pinjaman dengan join ke anggota dan kelompok_tani
         $data['pinjaman'] = $pinjamanmodel->select('pinjaman.id_pinjaman, pinjaman.nominal_pinjaman, pinjaman.tanggal_pinjaman, pinjaman.angsuran, pinjaman.bunga, pinjaman.status, 
-                                                    pinjaman.bukti_disetujui, anggota.surename, anggota.handphone, anggota.kelompok_tani, anggota.nik')
-                                          ->join('anggota', 'pinjaman.id_anggota = anggota.id_anggota')  // Corrected join condition
+                                                    pinjaman.bukti_disetujui, anggota.surename, anggota.handphone, kelompok_tani.kelompok_tani, anggota.nik')
+                                          ->join('anggota', 'pinjaman.id_anggota = anggota.id_anggota')
+                                          ->join('kelompok_tani', 'anggota.id_kelompok = kelompok_tani.id_kelompoktani')  // Updated join
                                           ->where('pinjaman.id_pinjaman', $id_pinjaman)
-                                          ->first();  // Retrieve a single row
+                                          ->first();
     
         // Check if pinjaman data is found
         if ($data['pinjaman']) {
             // Ambil data pembayaran jika data pinjaman ditemukan
-            $builder = $pembayaran->select('pembayaran.*')
-                                    ->where('pembayaran.id_pinjaman',$id_pinjaman);
-            //$builder = $pembayaran->where('id_pinjaman', $data['pinjaman']['id_pinjaman'])->findAll();
+            $builder = $pembayaranmodel->select('pembayaran.*')
+                                       ->where('pembayaran.id_pinjaman', $id_pinjaman);
             $results = $builder->paginate($perPage, 'default', $page);
-            $pager=$builder->pager;
+            $pager = $builder->pager;
             $data['pembayaran'] = $results;
             $data['pager'] = $pager;
-
+    
         } else {
             // Handle the case where no pinjaman is found
             $data['pinjaman'] = [];
@@ -102,6 +103,7 @@ class Pinjaman extends BaseController{
     
         return view('ksp/pinjaman_detail', $data);
     }
+    
 
     public function pembayaran($id_pinjaman){
         $session = session();
