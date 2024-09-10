@@ -1,6 +1,11 @@
 <?= $this->extend('layout_kasir') ?>
 <?= $this->section('content') ?>
 <div class="container mt-5">
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
     <div class="row justify-content-center"> <!-- Center the row horizontally -->
         <div class="col-lg-10">
             <div class="table-responsive">

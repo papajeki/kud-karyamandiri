@@ -101,7 +101,9 @@ class Kasir extends BaseController
         }
     
         // Ambil data anggota untuk dropdown
-        $anggotaList = $anggotaModel->findAll();
+        $anggotaList = $anggotaModel->select('anggota.*, kelompok_tani.*')
+                                    ->join('kelompok_tani','anggota.id_kelompok = kelompok_tani.id_kelompoktani')
+                                    ->findAll();
         
         return view('waserda/transaksi', [
             'result' => $result,
@@ -300,11 +302,11 @@ class Kasir extends BaseController
  //kredit waserda
  public function credits(){
     $creditsModel = new CreditsModel();
-    $creditstotal = $creditsModel->select('credits.status,anggota.id_anggota, anggota.surename, anggota.kelompok_tani, SUM(penjualan.total_belanja) as total_credits')
+    $creditstotal = $creditsModel->select('credits.status,anggota.id_anggota, anggota.surename, anggota.id_kelompok, SUM(penjualan.total_belanja) as total_credits')
                                 ->join('penjualan','credits.id_penjualan = penjualan.id_penjualan')
                                 ->join('anggota', 'anggota.id_anggota = credits.id_anggota')
                                 ->groupBy('credits.id_anggota')
-                                ->orderBy('kelompok_tani')
+                                ->orderBy('id_kelompok')
                                 ->findAll();                                                                                                                                                                                    
     $data['credits'] =$creditstotal;
     return view('waserda/credits', $data);

@@ -44,11 +44,13 @@
                     </thead>
                     <tbody>
                         <?php $index = 1; ?>
+                        <?php if(!empty($creditsSummary['hitung_akhir'])): ?>
                         <tr>
                             <td><?= $index ++;?></td>
                             <td>WASERDA</td>
                             <td>Rp <?= number_format($creditsSummary['hitung_akhir'], 0, ',', '.') ?? '0'; ?></td>
                         </tr>
+                        <?php endif ?>
                         <?php if(!empty($potongan)): ?>
                             <?php foreach($potongan as $pot): ?>
                         <tr>

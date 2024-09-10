@@ -16,11 +16,12 @@ class Credits extends BaseController{
     }
     public function credits(){
         $creditsModel = new CreditsModel();
-        $creditstotal = $creditsModel->select('credits.status,anggota.id_anggota, anggota.surename, anggota.kelompok_tani, SUM(penjualan.total_belanja) as total_credits')
+        $creditstotal = $creditsModel->select('credits.status,anggota.id_anggota, anggota.surename, anggota.id_kelompok,kelompok_tani.*, SUM(penjualan.total_belanja) as total_credits')
                                     ->join('penjualan','credits.id_penjualan = penjualan.id_penjualan')
                                     ->join('anggota', 'anggota.id_anggota = credits.id_anggota')
+                                    ->join('kelompok_tani','kelompok_tani.id_kelompoktani = anggota.id_kelompok')
                                     ->groupBy('credits.id_anggota')
-                                    ->orderBy('kelompok_tani')
+                                    ->orderBy('id_kelompok')
                                     ->where('status','belum lunas')
                                     ->findAll();                                                                                                                                                                                    
         $data['credits'] =$creditstotal;
@@ -32,7 +33,9 @@ class Credits extends BaseController{
         $creditsModel = new CreditsModel();
     
         // Fetch the member data
-        $data['anggota'] = $modelanggota->where('id_anggota', $id_anggota)->first();
+        $data['anggota'] = $modelanggota->select('anggota.*, kelompok_tani.*')
+                                        ->join('kelompok_tani', 'anggota.id_kelompok = kelompok_tani.id_kelompoktani')
+                                        ->where('id_anggota', $id_anggota)->first();
     
         // Fetch the credits summary and details
         $data['creditsSummary'] = $creditsModel->select('SUM(penjualan.total_belanja) as hitung_akhir')
@@ -60,9 +63,9 @@ class Credits extends BaseController{
                      ->where('id_anggota', $id_anggota)
                      ->where('status', 'belum lunas')  // Only update if status is 'belum lunas'
                      ->update();
-    
+        session()->setFlashdata('success', 'Pelunasan telah dilakukan');
         // Redirect back to the detail page after the update
-        return redirect()->to('/waserda/credits/credits_detail/' . $id_anggota);
+        return redirect()->to('/waserda/credits/credits/');
     }
       
 }

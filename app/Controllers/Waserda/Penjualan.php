@@ -54,21 +54,26 @@ class Penjualan extends BaseController
         $tahun = $this->request->getGet('tahun');
     
         // Buat query dasar
-        $labaQuery = $stokmodel->select('stok.id_stok, barang.nama_barang, stok.harga_beli, stok.kuantitas AS total_kuantitas, 
-                                         SUM(item_terjual.jumlah) AS total_terjual, 
-                                         item_terjual.harga AS harga_jual, 
-                                         (stok.kuantitas * stok.harga_beli) AS total_modal, 
-                                         SUM(item_terjual.jumlah * item_terjual.harga) AS total_pendapatan, 
-                                         (SUM(item_terjual.jumlah * item_terjual.harga) - SUM(item_terjual.jumlah * stok.harga_beli)) AS total_keuntungan')
-                                ->join('item_terjual', 'item_terjual.id_stok = stok.id_stok')
-                                ->join('barang', 'barang.id_barang = stok.id_barang');
-    
-        // Tambahkan filter jika bulan dan tahun ada
-        if ($bulan && $tahun) {
-            $labaQuery->where('MONTH(item_terjual.tanggal)', $bulan)
-                      ->where('YEAR(item_terjual.tanggal)', $tahun);
-        }
-    
+$labaQuery = $stokmodel->select('stok.id_stok, barang.nama_barang, stok.harga_beli, stok.kuantitas AS total_kuantitas, 
+                                 SUM(item_terjual.jumlah) AS total_terjual, 
+                                 item_terjual.harga AS harga_jual, 
+                                 (stok.kuantitas * stok.harga_beli) AS total_modal, 
+                                 SUM(item_terjual.jumlah * item_terjual.harga) AS total_pendapatan, 
+                                 (SUM(item_terjual.jumlah * item_terjual.harga) - SUM(item_terjual.jumlah * stok.harga_beli)) AS total_keuntungan')
+                            ->join('item_terjual', 'item_terjual.id_stok = stok.id_stok')
+                            ->join('barang', 'barang.id_barang = stok.id_barang');
+
+// Tambahkan filter jika bulan dan tahun ada
+if ($bulan && $tahun) {
+    $labaQuery->where('MONTH(item_terjual.tanggal)', $bulan)
+              ->where('YEAR(item_terjual.tanggal)', $tahun);
+} else {
+    // Jika bulan dan tahun tidak ada, tampilkan data untuk tahun saat ini
+    $currentYear = date('Y'); // Ambil tahun saat ini
+    $labaQuery->where('YEAR(item_terjual.tanggal)', $currentYear);
+}
+
+
         // Kelompokkan hasil
         $laba = $labaQuery->groupBy('stok.id_stok, item_terjual.harga')->findAll();
     

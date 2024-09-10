@@ -146,6 +146,11 @@ class Ketua extends BaseController
                 'total_gaji_bersih' => $gajiBersih,
                 'tanggal_penyaluran' => date('Y-m-d')
             ]);
+        // Update the status for all records with 'belum lunas' for the specific member
+        $creditsmodel->set('status', 'lunas')
+        ->where('id_anggota', $id_anggota)
+        ->where('status', 'belum lunas')  // Only update if status is 'belum lunas'
+        ->update();
     
             return redirect()->to('/kelompok/riwayat_gaji/'.$id_anggota)->with('success', 'Gaji berhasil disimpan.');
         }
