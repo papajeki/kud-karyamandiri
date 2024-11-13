@@ -36,7 +36,6 @@ public function process()
                 'username'     => $data['username'],
                 'surename'    => $data['surename'],
                 'role' => $data['roles'],
-                'id_kelompok' => $data['id_kelompok'],
                 'logged_in'     => TRUE
             ];
             $session->set($ses_data);

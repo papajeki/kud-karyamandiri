@@ -65,7 +65,7 @@ class Credits extends BaseController{
                      ->update();
         session()->setFlashdata('success', 'Pelunasan telah dilakukan');
         // Redirect back to the detail page after the update
-        return redirect()->to('/waserda/credits/credits/');
+        return redirect()->to('/waserda/credits/credits_detail/' .$id_anggota);
     }
       
 }

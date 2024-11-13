@@ -1,7 +1,7 @@
 <?= $this->extend('testerlayout') ?>
 <?= $this->section('content') ?>
 
-<div class="d-flex" style="padding:1em;">	<button class="btn btn-success" style="border-radius:15px; margin-inline-start:auto">
+<div class="d-flex" style="padding:1em;">	<button class="btn" style="border-radius:15px; margin-inline-start:auto; background-color: #08F63D;">
 			<a href="<?=base_url('/admin/create_user')?>" style="text-decoration:none; color:white;">
 			Create Account</a>
 		</button>

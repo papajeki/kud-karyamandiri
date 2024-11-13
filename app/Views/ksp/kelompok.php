@@ -2,8 +2,16 @@
 <?= $this->section('content') ?>
 
 <div class="container pt-5">
-    <h2 class="text-center">Daftar Kelompok Tani</h2>
+    <?php if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+    <?php endif; ?>
+
+    <?php if (session()->getFlashdata('success')): ?>
+        <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+    <?php endif; ?>
     
+    <h2 class="text-center">Daftar Kelompok Tani</h2>
+
     <!-- Tambah Data Button -->
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Data</button>
@@ -14,7 +22,8 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nominal Pinjaman</th>
+                    <th>Kelompok</th>
+                    <th>Ketua</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -25,18 +34,19 @@
                     <?php foreach ($kelompok as $index => $row): ?>
                         <tr>
                             <td><?= $index + 1 + ($currentPage - 1) * $perPage ?></td>
-                            <td><?= $row['kelompok_tani']?></td>
+                            <td><?= $row['kelompok_tani'] ?></td>
+                            <td><?= $row['surename'] ? $row['surename'] : 'No Leader' ?></td>
                             <td>
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?= $row['id_kelompoktani'] ?>" data-kelompok="<?= $row['kelompok_tani'] ?>">Edit</button>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?= $row['id_kelompoktani'] ?>" data-kelompok="<?= $row['kelompok_tani'] ?>" data-ketua="<?= $row['id_ketua'] ?>">Edit</button>
                                 <a href="<?= base_url('ksp/hapus_kelompok/' . $row['id_kelompoktani']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">Hapus</a>
                             </td>
                         </tr>
-                    <?php endforeach ?>
+                    <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="3" class="text-center">No data found</td>
+                        <td colspan="4" class="text-center">No data found</td>
                     </tr>
-                <?php endif ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
@@ -58,6 +68,15 @@
                     <div class="mb-3">
                         <label for="kelompok_tani" class="form-label">Kelompok Tani</label>
                         <input type="text" class="form-control" id="kelompokTani" name="kelompok_tani" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ketua" class="form-label">Pilih Ketua Kelompok</label>
+                        <select class="form-select" aria-label="Pilih Ketua" name="id_ketua" id="ketua">
+                            <option value="">Pilih Ketua</option>
+                            <?php foreach($users as $member): ?>
+                                <option value="<?= esc($member['id']) ?>"><?= esc($member['surename']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -84,6 +103,14 @@
                         <label for="editkelompoktani" class="form-label">Edit Kelompok Tani</label>
                         <input type="text" class="form-control" id="editkelompoktani" name="kelompok_tani" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="editketua" class="form-label">Pilih Ketua Kelompok</label>
+                        <select class="form-select" aria-label="Pilih Ketua" name="id_ketua" id="editketua">
+                            <?php foreach($users as $member): ?>
+                                <option value="<?= esc($member['id']) ?>"><?= esc($member['surename']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -95,21 +122,26 @@
 </div>
 
 <script>
-    // Handle edit modal show event
-    var editModal = document.getElementById('editModal');
-    editModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var id = button.getAttribute('data-id');
-        var kelompok = button.getAttribute('data-kelompok');
+// JavaScript for editing modal functionality
+var editModal = document.getElementById('editModal');
+editModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var id = button.getAttribute('data-id');
+    var kelompok = button.getAttribute('data-kelompok');
+    var ketua = button.getAttribute('data-ketua');
 
-        var modalBodyInputId = editModal.querySelector('#editId');
-        var modalBodyInputKelompok = editModal.querySelector('#editkelompoktani');
+    var modalBodyInputId = editModal.querySelector('#editId');
+    var modalBodyInputKelompok = editModal.querySelector('#editkelompoktani');
+    var modalBodyInputKetua = editModal.querySelector('#editketua');
 
-        modalBodyInputId.value = id;
-        modalBodyInputKelompok.value = kelompok;
+    modalBodyInputId.value = id;
+    modalBodyInputKelompok.value = kelompok;
+
+    // Set the selected option in the ketua dropdown
+    Array.from(modalBodyInputKetua.options).forEach(function(option) {
+        option.selected = option.value == ketua;
     });
+});
 </script>
 
 <?= $this->endSection() ?>
-
-

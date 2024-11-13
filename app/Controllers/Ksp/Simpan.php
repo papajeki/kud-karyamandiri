@@ -81,7 +81,9 @@ class Simpan extends BaseController
                                           ->join('anggota', 'anggota.id_anggota = tabungan.id_anggota')
                                           ->where('tabungan.id_tabungan', $id_tabungan)
                                           ->first();  // Retrieve a single row
-        $data['riwayat'] = $riwayattabungan->where('id_tabungan', $data['simpanan']['id_tabungan'])->findAll();
+        $data['riwayat'] = $riwayattabungan->where('id_tabungan', $data['simpanan']['id_tabungan'])
+                                            ->orderBy('tanggal','DESC')
+                                            ->findAll();
     
         return view('ksp/tabungan_detail', $data);
     }
@@ -93,8 +95,8 @@ class Simpan extends BaseController
         $tabunganmodel = new TabunganModel;
         $anggotamodel = new AnggotaModel;
 
-        $buku= $tabunganmodel->where('id_anggota',$id_tabungan)->first();
-        $person = $anggotamodel->where('id_anggota',$buku['id_tabungan'])->first();
+        $buku= $tabunganmodel->where('id_tabungan',$id_tabungan)->first();
+        $person = $anggotamodel->where('id_anggota',$buku['id_anggota'])->first();
        
         if($this->request->getMethod() === 'post'){
         //persiapan verif password    
@@ -130,50 +132,62 @@ class Simpan extends BaseController
         return view('ksp/menabung',$data);
     }
 
-    public function tarik_transaksi($id_tabungan){
-        $session= session();
+    public function tarik_transaksi($id_tabungan)
+    {
+        $session = session();
         $model = new UserModel;
         $riwayattabungan = new RiwayatTabunganModel;
         $tabunganmodel = new TabunganModel;
         $anggotamodel = new AnggotaModel;
-
-        $buku= $tabunganmodel->where('id_anggota',$id_tabungan)->first();
-        $person = $anggotamodel->where('id_anggota',$buku['id_anggota'])->first();
-
-        if($this->request->getMethod() === 'post'){
-        //persiapan verif password    
-        $password = $this->request->getVar('password');
-        $username = session('username');
-        $builder = $model->where('username', $username)->first();
-            if($builder){
+    
+        $buku = $tabunganmodel->where('id_tabungan', $id_tabungan)->first();
+        $person = $anggotamodel->where('id_anggota', $buku['id_anggota'])->first();
+    
+        if ($this->request->getMethod() === 'post') {
+            // Verifikasi password
+            $password = $this->request->getVar('password');
+            $username = session('username');
+            $builder = $model->where('username', $username)->first();
+    
+            if ($builder) {
                 $pass = $builder['password'];
                 $verif = password_verify($password, $pass);
-            if($verif){
-        //
-        $data = [
-            'id_tabungan' => $buku['id_tabungan'],
-            'id_anggota' => $buku['id_anggota'],
-            'jenis_transaksi' => 'penarikan',
-            'jumlah' => $this->request->getPost('jumlah'),
-            'tanggal' => date('Y-m-d H:i:s'),
-            'deskripsi' => $this->request->getPost('deskripsi')
-        ]; 
-        $riwayattabungan->insert($data);
-        $buku['saldo'] -= $data['jumlah'];
-        $tabunganmodel->update($id_tabungan,$buku);
-        return redirect()->to("/ksp/tabungan_detail/" . $data['id_tabungan']);
-                }else{
-                    $session->setFlashdata('msg',"Password Salah");
-                    return redirect()->to('ksp/tarik_transaksi/'.$id_tabungan);
+    
+                if ($verif) {
+                    $jumlahPenarikan = $this->request->getPost('jumlah');
+    
+                    // Validasi saldo cukup atau tidak
+                    if ($buku['saldo'] >= $jumlahPenarikan) {
+                        $data = [
+                            'id_tabungan' => $buku['id_tabungan'],
+                            'id_anggota' => $buku['id_anggota'],
+                            'jenis_transaksi' => 'penarikan',
+                            'jumlah' => $jumlahPenarikan,
+                            'tanggal' => date('Y-m-d H:i:s'),
+                            'deskripsi' => $this->request->getPost('deskripsi')
+                        ];
+    
+                        $riwayattabungan->insert($data);
+                        $buku['saldo'] -= $data['jumlah'];
+                        $tabunganmodel->update($id_tabungan, $buku);
+    
+                        return redirect()->to("/ksp/tabungan_detail/" . $data['id_tabungan']);
+                    } else {
+                        // Saldo tidak mencukupi
+                        $session->setFlashdata('msg', "Saldo tidak mencukupi untuk penarikan.");
+                        return redirect()->to('ksp/tarik_transaksi/' . $id_tabungan);
+                    }
+                } else {
+                    $session->setFlashdata('msg', "Password Salah");
+                    return redirect()->to('ksp/tarik_transaksi/' . $id_tabungan);
                 }
             }
-        //
         }
-        $data['person']=$person;
-        $data['buku']=$buku;
-        return view('ksp/menarik',$data);
+    
+        $data['person'] = $person;
+        $data['buku'] = $buku;
+        return view('ksp/menarik', $data);
     }
-
     public function tambah_tabungan(){
         $anggotamodel = new AnggotaModel;
         $tabunganmodel = new TabunganModel;

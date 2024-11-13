@@ -15,13 +15,15 @@
 	<!-- Layout tampilan web, atas dan konten -->
 	<div class="d-flex">
 		<!--sidebar dimatikan  -->
-		<div style="width: 100%;">
+		<div style="width: 100%; ">
 			<header class="jumbotron jumbotron-fluid">
 				<div class="d-flex">
 					<?= $this->include('layout/navbar') ?>
 				</div>
 			</header>
+			<div style="width: 100%; background-color:#1B9C85;">
 			<?= $this->renderSection('content') ?>
+			</div>
 		</div>
 		
 	</div>

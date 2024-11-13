@@ -16,8 +16,8 @@
                     <p>Jenis Tabungan: <?= esc($simpanan['jenis_tabungan']) ?></p>
                 </div>
                 <div class="card-footer">
-                    <a href="<?= base_url('ksp/simpan_transaksi/' .$simpanan['id_tabungan']) ?>"><button class="btn btn-success">Penabungan</button></a>
-                    <a href="<?= base_url('ksp/tarik_transaksi/' .$simpanan['id_tabungan']) ?>"><button class="btn btn-danger">Penarikan</button></a>
+                    <a href="<?= base_url('ksp/simpan_transaksi/' .$simpanan['id_tabungan']) ?>"><button class="btn btn-success">Deposit</button></a>
+                    <a href="<?= base_url('ksp/tarik_transaksi/' .$simpanan['id_tabungan']) ?>"><button class="btn btn-danger">Tarik tunai</button></a>
                 </div>
             </div>
         </div>

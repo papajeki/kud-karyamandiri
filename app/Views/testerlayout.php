@@ -33,17 +33,19 @@
 <body>
 
 	
-	<div class="d-flex">
+	<div class="d-flex" >
 	<div class="collapse collapse-horizontal" id="sidebarcollapse">
 		<?= $this->include('layout/sidebar') ?>
 	</div>
 		<div style="width: 100%;">
 			<header class="jumbotron jumbotron-fluid">
-				<div class="d-flex">
+				<div class="d-flex;" style="background-color: white;">
 					<?= $this->include('layout/navbar_admin') ?>
 				</div>
 			</header>
+            <div>
 			<?= $this->renderSection('content') ?>
+            </div>
 		</div>
 		
 	</div>

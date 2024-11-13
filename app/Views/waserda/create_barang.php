@@ -9,7 +9,7 @@
             </div>
             <div class="form-group">
                 <label for="barcode">Barcode</label>
-                <input type="number" maxlength="50" class="form-control" id="barcode" name="barcode" required>
+                <input type="number" maxlength="50" class="form-control" id="barcode" name="barcode">
             </div>
             <div class="form-group">
                 <label for="harga_jual">Harga Jual</label>

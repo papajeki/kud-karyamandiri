@@ -15,7 +15,7 @@
 				width:fit-content;
 				text-decoration:none;
 			">
-				<span style="font-weight:bold; color:white;">Super Admin</span>
+				<span style="font-size: 26px; font-weight:bold; color:white;">Super Admin</span>
 			</a>
 		<?php }?>
 
@@ -29,7 +29,7 @@
 				width:fit-content;
 				text-decoration:none;
 			">
-				<span style="font-weight:bold; color:white;">WASERDA</span>
+				<span style="font-size: 26px; font-weight:bold; color:white;">WASERDA</span>
 			</a>
 		<?php }?>
 
@@ -43,7 +43,7 @@
 			width:fit-content;
 			text-decoration:none;
 		">
-			<span style="font-weight:bold; color:white;">Simpan Pinjam</span>
+			<span style="font-size: 26px; font-weight:bold; color:white;">Simpan Pinjam</span>
 		</a>
 		<?php }?>
 
@@ -57,7 +57,7 @@
 			width:fit-content;
 			text-decoration:none;
 		">
-			<span style="font-weight:bold; color:white;">Kelompok Tani</span>
+			<span style="font-size: 26px; font-weight:bold; color:white;">Kelompok Tani</span>
 		</a>
 		<?php }?>
 	</div>

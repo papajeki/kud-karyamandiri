@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body">
                     <P><?= isset($topsell['nama_barang']) ? $topsell['nama_barang'] : 'Tidak ada data' ?></P>
-                    <p>Nilai Penjualan : Rp<?= number_format($topsell['total_penjualan'], 2, ',', '.') ?></p>
+                    <p>Nilai Penjualan : Rp<?= isset($topsell['total_penjualan']) ? number_format($topsell['total_penjualan'], 2, ',', '.') : '0,00' ?></p>
                 </div>
             </div>
         </div>

@@ -22,7 +22,8 @@
 
                             </div>
                             <span class="text-muted"> <?= $anggota['kelompok_tani'] ?> </span>
-                            <span class="text-muted">Total Tagihan: <?= $creditsSummary['hitung_akhir'] ?> </span>
+                            <span class="text-muted">Total Tagihan: <?= $creditsSummary['hitung_akhir'] ?? '0' ?> </span>
+
                         </div>
                     </div>
                 </div>
@@ -35,18 +36,24 @@
                     <th>No</th>
                     <th>Tanggal</th>
                     <th>Nilai Tagihan</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if(!empty($creditsDetails)):
-                    $index = 0; ?>
+                <?php if(!empty($creditsDetails)): ?>
+                    <?php $index = 0; ?>
                     <?php foreach($creditsDetails as $row): ?>
                     <tr onclick="window.location='<?= base_url('waserda/kasir/receipt/' . $row['id_penjualan']); ?>';" style="cursor: pointer;">
                         <td><?= ++$index ?></td>
                         <td><?= $row['tanggal'] ?></td>
                         <td><?= $row['total_belanja'] ?></td>
+                        <td><?= $row['status'] ?></td>
                     </tr>
                     <?php endforeach ?>
+                    <?php else: ?>
+                    <tr>
+                        <td colspan="4" class="text-center">Data tidak tersedia</td>
+                    </tr>
                 <?php endif ?>
             </tbody>
             </table>

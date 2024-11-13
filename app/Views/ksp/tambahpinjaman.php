@@ -39,10 +39,10 @@
                 </div>
                 <div class="mb-3">
                     <label for="bunga" class="form-label">Bunga %</label>
-                    <input type="number" class="form-control" id="bunga" name="bunga" required>
+                    <input type="number" class="form-control" id="bunga" name="bunga" value="1" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="bukti_disetujui" class="form-label">Upload Bukti Persetujuan</label>
+                    <label for="bukti_disetujui" class="form-label">Upload Bukti Persetujuan PDF</label>
                     <input class="form-control" type="file" id="bukti_disetujui" name="bukti_disetujui" required>
                     <div class="invalid-feedback" id="fileError" style="display: none;">
                         File harus berjenis .doc atau .pdf.
@@ -58,16 +58,29 @@
 document.getElementById('loanForm').addEventListener('submit', function(event) {
     var fileInput = document.getElementById('bukti_disetujui');
     var filePath = fileInput.value;
-    var allowedExtensions = /(\.doc|\.pdf)$/i;
-    
+    var allowedExtensions = /(\.doc|\.docx|\.pdf)$/i;
+    var maxSize = 4 * 1024 * 1024; // 4MB in bytes
+
+    // Check file extension
     if (!allowedExtensions.exec(filePath)) {
         event.preventDefault();
+        document.getElementById('fileError').innerText = 'File harus berjenis .doc, .docx, atau .pdf.';
         document.getElementById('fileError').style.display = 'block';
         fileInput.classList.add('is-invalid');
-    } else {
+    } 
+    // Check file size
+    else if (fileInput.files[0].size > maxSize) {
+        event.preventDefault();
+        document.getElementById('fileError').innerText = 'Ukuran file maksimal 4MB.';
+        document.getElementById('fileError').style.display = 'block';
+        fileInput.classList.add('is-invalid');
+    } 
+    // If both checks pass, remove error states
+    else {
         fileInput.classList.remove('is-invalid');
         document.getElementById('fileError').style.display = 'none';
     }
 });
 </script>
+
 <?= $this->endSection() ?>

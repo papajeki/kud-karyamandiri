@@ -33,9 +33,9 @@
             <label for="kelompok">Kelompok</label>
             <select class="form-select" aria-label="Default select example" id="kelompok" name="kelompok">
                 <option selected>Pilih Kelompok Yang diketuai</option>
-                <?php foreach ($kelompok as $nilai): ?>
-                <option value="<?= esc($nilai['kelompok_tani']) ?>"><?= ($nilai['kelompok_tani']) ?></option>
-            <?php endforeach ?>
+                 <?php foreach ($kelompok as $nilai): ?>
+                <option value="<?= esc($nilai['id_kelompoktani']) ?>"><?= esc($nilai['kelompok_tani']) ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
         <button type="submit" class="btn btn-primary mt-2">Submit</button>

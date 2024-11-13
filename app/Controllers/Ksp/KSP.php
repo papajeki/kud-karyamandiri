@@ -5,6 +5,7 @@ namespace App\Controllers\Ksp;
 use App\Controllers\BaseController;
 use App\Models\AnggotaModel;
 use App\Models\KelompokTaniModel;
+use App\Models\PinjamanModel;
 
 class KSP extends BaseController
 { 
@@ -18,7 +19,13 @@ class KSP extends BaseController
 
     public function index()
     {
-        echo view('ksp/dashboard');
+    $pinjamanmodel = new PinjamanModel();
+    $peminjam = $pinjamanmodel->where('status','belum lunas')
+                                ->countAllResults();
+    $totalpinjaman = $pinjamanmodel->where('status','belum lunas')->selectSum('nominal_pinjaman')->get()->getrow()->nominal_pinjaman;
+    $data['peminjam'] = $peminjam;
+    $data['totalpinjaman']=$totalpinjaman;
+        echo view('ksp/dashboard', $data);
     }
 
     public function anggota() {

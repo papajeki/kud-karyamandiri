@@ -12,7 +12,7 @@
                     <p>Nama <?= esc($person['surename']) ?></p>
                     <form action="<?= base_url('ksp/tarik_transaksi/' .$buku['id_tabungan']) ?>" method="post">
                     <div class="mb-2">
-                    <label for="jumlah">Nominal Menabung</label>
+                    <label for="jumlah">Nominal Menarik</label>
                     <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="masukkan nominal uang" required>
                     </div>
                     <div class="mb-2">
@@ -23,7 +23,7 @@
                     <label for="password">konfirmasi Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="masukkan sandi" required>
                     </div>
-                    <button class="btn btn-success" type="submit">Penarikan Uang</button>
+                    <button class="btn btn-success" type="submit">Tarik Tunai</button>
                     </form>
                     <?php if(session()->getFlashdata('msg')):?>
                     <div class="card-footer">

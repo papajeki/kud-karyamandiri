@@ -13,7 +13,7 @@
                     <form action="<?= base_url('ksp/pembayaran/' .$pinjaman['id_pinjaman']) ?>" method="post">
                     <div class="mb-2">
                     <label for="nominal_pembayaran" class="form-label">Nominal Pembayaran</label>
-                    <input type="number" class="form-control" id="nominal_pembayaran" name="nominal_pembayaran" value="<?= $pinjaman['tagihan'] ?>">
+                    <input type="number" class="form-control" id="nominal_pembayaran" name="nominal_pembayaran" value="<?= $pinjaman['tagihan'] ?>" required title="Silakan isi kolom ini dengan benar">
                     </div>
                     <div class="mb-2">
                     <label for="deskripsi">Deskripsi</label>

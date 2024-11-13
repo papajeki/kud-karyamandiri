@@ -1,6 +1,11 @@
 <?= $this->extend('layout_kelompok') ?>
 <?= $this->section('content') ?>
 <div>
+<?php if(session()->getFlashdata('error')): ?>
+    <div class="alert alert-danger">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
     <div class="row m-5">
         <div class="col col-lg-6 shadow">
             <form method="post" action="<?= base_url('/kelompok/gaji/'.$anggota['id_anggota']) ?>">

@@ -1,4 +1,4 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width:200px; height:50em;">
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white" style="background-color: #1B9C85; width:200px; height:50em;">
     <a href="<?= base_url('/index') ?>" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <img src="<?= base_url('image/logokoperasi.png') ?>" class="me-2" width="40" height="40">
         <span style="font: size 12px;">Karya Mandiri</span>

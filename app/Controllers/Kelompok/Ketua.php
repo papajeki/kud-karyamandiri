@@ -23,11 +23,18 @@ class Ketua extends BaseController
     }
     public function panen(){        
         $sess = session();
-        $pengurus = $sess->get('id_kelompok');
+        $pengurus = $sess->get('id');
         $modelanggota = new AnggotaModel;
         $kelompokmodel  = new KelompokTaniModel;
+
+        // jika ketua kelompok yang login
+        if (session()->get('role') ==="petani"){
         $data['pengurus'] = $pengurus;
-        $data['anggota'] = $modelanggota->where('id_kelompok',$pengurus)->findAll();
+        $data['kelompok'] = $kelompokmodel->where('id_ketua',$pengurus)->first();
+        $data['anggota'] = $modelanggota->where('id_kelompok',$data['kelompok']['id_kelompoktani'])->findAll();
+        }else{
+            $data['anggota'] = $modelanggota->findAll();  
+        }
         //cek apakah ada request input
         if($this->request->getMethod() === 'post'){
             $modelpanen = new PanenModel();
@@ -36,7 +43,7 @@ class Ketua extends BaseController
                 'tanggal_panen' => $this->request->getPost('tanggal_timbang'),
                 'berat_panen' => $this->request->getPost('hasil'),
                 'harga_tbs' => $this->request->getPost('harga'),
-                'id_kelompok' => $pengurus
+                'id_kelompok' => $this->request->getPost('id_kelompok')
             ];
             $modelpanen->insert($data);
             session()->setFlashdata('success', 'Data Panen berhasil disimpan!');
@@ -48,10 +55,16 @@ class Ketua extends BaseController
 
     public function anggota(){
         $sess = session();
-        $pengurus = $sess->get('id_kelompok');
+        $pengurus = $sess->get('id');
         $modelanggota = new AnggotaModel;
-        $data['pengurus'] = $pengurus;
-        $data['anggota'] = $modelanggota->where('id_kelompok',$pengurus)->findAll();
+        $kelompokmodel = new KelompokTaniModel();
+        if (session()->get('role') ==="petani"){
+            $data['pengurus'] = $pengurus;
+            $data['kelompok'] = $kelompokmodel->where('id_ketua',$pengurus)->first();
+            $data['anggota'] = $modelanggota->where('id_kelompok',$data['kelompok']['id_kelompoktani'])->findAll();
+            }else{
+                $data['anggota'] = $modelanggota->findAll();  
+            }
         return view('kelompok/anggota',$data);
     }
 
@@ -91,22 +104,23 @@ class Ketua extends BaseController
         $potonganmodel = new PotonganModel();
         $gajimodel = new GajiAnggotaModel();
         $sess = session();
-        $kelompok = $sess->get('id_kelompok');
     
         $previousMonth = date('m', strtotime('-1 month'));
         $prevyear = date('Y', strtotime('-1 month'));
     
         // Mendapatkan informasi anggota
         $data['anggota'] = $anggotamodel->find($id_anggota);
+        $kelompok = $data['anggota']['id_kelompok'];
     
         // Mendapatkan hasil panen bulan lalu
         $data['panen_lalu'] = $panenmodel->select('panen.*, (panen.berat_panen * panen.harga_tbs) as hasil_panen')
-                                        ->where('id_anggota', $id_anggota)
-                                        ->where('MONTH(tanggal_panen)', $previousMonth)
-                                        ->where('YEAR(tanggal_panen)', $prevyear)
-                                        ->groupBy('panen.id_panen')
-                                        ->orderBy('panen.tanggal_panen', 'ASC')
-                                        ->findAll();
+                                         ->where('id_anggota', $id_anggota)
+                                         ->where('MONTH(tanggal_panen)', $previousMonth)
+                                         ->where('YEAR(tanggal_panen)', $prevyear)
+                                         ->where('is_paid_off = 0')
+                                         ->groupBy('panen.id_panen')
+                                         ->orderBy('panen.tanggal_panen', 'ASC')
+                                         ->findAll();
     
         // Menghitung total hasil panen
         $totalHasilPanen = 0;
@@ -117,11 +131,11 @@ class Ketua extends BaseController
     
         // Mendapatkan summary credits (hutang) anggota
         $data['creditsSummary'] = $creditsmodel->select('SUM(penjualan.total_belanja) as hitung_akhir')
-                                            ->join('penjualan', 'credits.id_penjualan = penjualan.id_penjualan')
-                                            ->where('credits.id_anggota', $id_anggota)
-                                            ->where('credits.status', 'belum lunas')
-                                            ->groupBy('credits.id_anggota')
-                                            ->first();
+                                               ->join('penjualan', 'credits.id_penjualan = penjualan.id_penjualan')
+                                               ->where('credits.id_anggota', $id_anggota)
+                                               ->where('credits.status', 'belum lunas')
+                                               ->groupBy('credits.id_anggota')
+                                               ->first();
     
         // Mendapatkan potongan kelompok
         $data['potongan'] = $potonganmodel->where('id_kelompok', $kelompok)->findAll();
@@ -136,6 +150,11 @@ class Ketua extends BaseController
         // Jika form di-submit
         if ($this->request->getMethod() === 'post') {
             $gajiBersih = $totalHasilPanen - $totalNominal;
+            
+            // Validasi gaji bersih lebih besar dari 0
+            if ($gajiBersih < 1) {
+                return redirect()->back()->with('error', 'Gaji bersih tidak boleh bernilai 0 atau kurang');
+            }
     
             // Simpan ke database
             $gajimodel->insert([
@@ -146,11 +165,12 @@ class Ketua extends BaseController
                 'total_gaji_bersih' => $gajiBersih,
                 'tanggal_penyaluran' => date('Y-m-d')
             ]);
-        // Update the status for all records with 'belum lunas' for the specific member
-        $creditsmodel->set('status', 'lunas')
-        ->where('id_anggota', $id_anggota)
-        ->where('status', 'belum lunas')  // Only update if status is 'belum lunas'
-        ->update();
+    
+            // Update status credits menjadi lunas
+            $creditsmodel->set('status', 'lunas')
+                         ->where('id_anggota', $id_anggota)
+                         ->where('status', 'belum lunas')
+                         ->update();
     
             return redirect()->to('/kelompok/riwayat_gaji/'.$id_anggota)->with('success', 'Gaji berhasil disimpan.');
         }
@@ -158,34 +178,52 @@ class Ketua extends BaseController
         return view('kelompok/gaji', $data);
     }
     
-    public function potongan(){
+    
+    public function potongan()
+    {
         $potonganmodel = new PotonganModel();
+        $kelompokmodel = new KelompokTaniModel();
         $sess = session();
-        $pengurus = $sess->get('id_kelompok');
-
+        $pengurus = $sess->get('id');  // Ambil id pengurus dari sesi
+        // Ambil data kelompok tani berdasarkan id_ketua yang sesuai dengan id pengguna
+        $ketuakelompok = $kelompokmodel->where('id_ketua', $pengurus)->first();
+    
+        // Pastikan ketuakelompok ditemukan
+        if (!$ketuakelompok) {
+            // Tangani jika tidak ditemukan ketua kelompok tani terkait
+            return redirect()->to('/some_error_page');  // Ganti dengan halaman yang sesuai
+        }
+    
         $perPage = 10;
         $page = $this->request->getGet('page') ?? 1;
-
-        $data['potongan'] = $potonganmodel->where('id_kelompok', $pengurus)->paginate($perPage, 'default', $page);
-        $pager =$potonganmodel->pager;
+    
+        // Gunakan id_kelompok untuk mengambil data potongan yang sesuai
+        $data['potongan'] = $potonganmodel->where('id_kelompok', $ketuakelompok['id_kelompoktani'])->paginate($perPage, 'default', $page);
+    
+        // Menyiapkan pager untuk navigasi halaman
+        $pager = $potonganmodel->pager;
         $data['pager'] = $pager;
-    return view('kelompok/potongan', $data);
+    
+        return view('kelompok/potongan', $data);
     }
+    
     
     public function tambah_potongan(){
         $potonganmodel = new PotonganModel();
+        $kelompokmodel = new KelompokTaniModel();
         $sess = session();
-        $pengurus = $sess->get('id_kelompok');
+        $pengurus = $sess->get('id');  // Ambil id pengurus dari sesi
+        $ketuakelompok = $kelompokmodel->select('kelompok_tani.id_kelompoktani')
+                                        ->where('id_ketua', $pengurus)->first();
         $data = [
             'deskripsi' => $this->request->getPost('deskripsi'),
             'nominal' => $this->request->getPost('nominal'),
-            'id_kelompok' => $pengurus
+            'id_kelompok' => $ketuakelompok
         ];
         $potonganmodel->insert($data);
         session()->setFlashdata('success', 'Data berhasil ditambahkan');
         return redirect()->to(base_url('kelompok/potongan'));
     }
-
     public function edit_potongan(){
         $potonganmodel = new PotonganModel();
         $id = $this->request->getPost('id');

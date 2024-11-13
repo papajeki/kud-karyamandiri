@@ -91,16 +91,16 @@ $routes->group('ksp',function($routes){
     $routes->add('pengaturan-nominal', 'Ksp\Pengaturan::nominal');
     $routes->add('pengaturan-tempo', 'Ksp\Pengaturan::tempo');
     $routes->add('pengaturan-kelompok', 'Ksp\Pengaturan::kelompok');
-    $routes->post('edit_nominal', 'Ksp\Pengaturan::kelompok');
+    //$routes->post('edit_nominal', 'Ksp\Pengaturan::kelompok');
     $routes->post('tambah_nominal', 'Ksp\Pengaturan::tambah_nominal');
     $routes->add('edit_nominal', 'Ksp\Pengaturan::edit_nominal');
     $routes->add('hapus_nominal/(:num)', 'Ksp\Pengaturan::hapus_nominal/$1');
     $routes->post('tambah_tempo', 'Ksp\Pengaturan::tambah_tempo');
     $routes->post('edit_tempo', 'Ksp\Pengaturan::edit_tempo');
-    $routes->post('hapus_tempo/(:num)', 'Ksp\Pengaturan::hapus_tempo/$1');
+    $routes->add('hapus_tempo/(:num)', 'Ksp\Pengaturan::hapus_tempo/$1');
     $routes->post('tambah_kelompok', 'Ksp\Pengaturan::tambah_kelompok');
-    $routes->post('edit_kelompok', 'Ksp\Pengaturan::edit_kelompok');
-    $routes->post('hapus_kelompok/(:num)', 'Ksp\Pengaturan::hapus_kelompok/$1');
+    $routes->add('edit_kelompok', 'Ksp\Pengaturan::edit_kelompok');
+    $routes->add('hapus_kelompok/(:num)', 'Ksp\Pengaturan::hapus_kelompok/$1');
 });
 
 $routes->group('kelompok', function($routes){

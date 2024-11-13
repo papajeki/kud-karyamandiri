@@ -37,18 +37,33 @@ class Users extends BaseController
     public function simpan()
     {
         $model = new UserModel();
+        $kelompokModel = new KelompokTaniModel();
+        
+        // Menyiapkan data pengguna
         $data = [
             'username' => $this->request->getPost('username'),
-            'password' => password_hash($this->request->getVar('password'),PASSWORD_DEFAULT),
+            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
             'surename' => $this->request->getPost('surename'),
-            'roles' => $this->request->getPost('roles'),
-        'kelompok_tani' => $this->request->getPost('kelompok')];
+            'roles' => $this->request->getPost('roles')
+        ];
+        
+        // Menyimpan data pengguna
+        $model->insert($data);
+        
+        // Mendapatkan ID pengguna yang baru saja dibuat
+        $userId = $model->getInsertID();
+        
+        // Jika roles adalah "petani", simpan id_ketua di tabel kelompok_tani
+        if ($data['roles'] === 'petani') {
+            $kelompokId = $this->request->getPost('kelompok');
             
-            $model->insert($data);
-    
-            return redirect()->to("admin/users");
+            // Update id_ketua di kelompok_tani
+            $kelompokModel->update($kelompokId, ['id_ketua' => $userId]);
         }
-
+        
+        return redirect()->to("admin/users");
+    }
+    
     public function create_user()
     {
         $sess = session();

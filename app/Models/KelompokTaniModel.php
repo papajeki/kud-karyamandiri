@@ -8,5 +8,5 @@ class KelompokTaniModel extends Model
 {
     protected $table = 'kelompok_tani';
     protected $primaryKey = 'id_kelompoktani';
-    protected $allowedFields = ['kelompok_tani'];
+    protected $allowedFields = ['kelompok_tani', 'id_ketua'];
 }
