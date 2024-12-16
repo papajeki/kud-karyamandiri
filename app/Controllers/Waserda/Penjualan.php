@@ -97,8 +97,8 @@ if ($bulan && $tahun) {
 
         // Tambahkan filter jika bulan dan tahun ada
         if ($bulan && $tahun) {
-            $labaQuery->where('MONTH(item_terjual.tanggal_terjual)', $bulan)
-                       ->where('YEAR(item_terjual.tanggal_terjual)', $tahun);
+            $labaQuery->where('MONTH(item_terjual.tanggal)', $bulan)
+                       ->where('YEAR(item_terjual.tanggal)', $tahun);
         }
 
         // Kelompokkan hasil

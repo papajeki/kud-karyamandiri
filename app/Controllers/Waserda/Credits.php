@@ -22,7 +22,6 @@ class Credits extends BaseController{
                                     ->join('kelompok_tani','kelompok_tani.id_kelompoktani = anggota.id_kelompok')
                                     ->groupBy('credits.id_anggota')
                                     ->orderBy('id_kelompok')
-                                    ->where('status','belum lunas')
                                     ->findAll();                                                                                                                                                                                    
         $data['credits'] =$creditstotal;
         return view('waserda/credits', $data);

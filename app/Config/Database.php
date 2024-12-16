@@ -27,8 +27,8 @@ class Database extends Config
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => 'admin',
-        'password'     => '12345',
+        'username'     => 'root',
+        'password'     => '',
         'database'     => 'kud_karyamandiri',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',

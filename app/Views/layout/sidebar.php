@@ -19,13 +19,6 @@
         Karyawan
       </a>
     </li>
-    <li class="nav-item navItem">
-      <a href="<?= base_url('/admin/harga_tbs') ?>"
-        class="nav-link <?= ($_SERVER['REQUEST_URI'] === "/admin/harga_tbs") ? 'active' : '' ?>"
-        style="text-decoration:none;color:white;"><i class="fa-solid fa-tag" style="color: #ffffff;"></i>
-        Harga Sawit
-      </a>
-    </li>
   </ul>
   <hr>
   <button class="btn btn-secondary" id="sidebar-close-button"><i class="fas fa-times"></i> Close</button>
